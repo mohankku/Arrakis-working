@@ -1,0 +1,651 @@
+rm -rf redis-server redis-sentinel redis-cli redis-benchmark redis-check-dump redis-check-aof *.o *.gcda *.gcno *.gcov redis.info lcov-html
+(cd ../deps && make distclean)
+make[1]: Entering directory `/home/mohan/test/redis/redis/deps'
+(cd hiredis && make clean) > /dev/null || true
+(cd linenoise && make clean) > /dev/null || true
+(cd lua && make clean) > /dev/null || true
+(cd jemalloc && [ -f Makefile ] && make distclean) > /dev/null || true
+(rm -f .make-*)
+make[1]: Leaving directory `/home/mohan/test/redis/redis/deps'
+(rm -f .make-*)
+echo STD=-std=c99 >> .make-settings
+echo WARN=-Wall >> .make-settings
+echo OPT=-O2 >> .make-settings
+echo MALLOC=libc >> .make-settings
+echo CFLAGS= >> .make-settings
+echo LDFLAGS= >> .make-settings
+echo REDIS_CFLAGS= >> .make-settings
+echo REDIS_LDFLAGS= >> .make-settings
+echo PREV_FINAL_CFLAGS=-std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src >> .make-settings
+echo PREV_FINAL_LDFLAGS=   -rdynamic >> .make-settings
+(cd ../deps && make hiredis linenoise lua)
+make[1]: Entering directory `/home/mohan/test/redis/redis/deps'
+(cd hiredis && make clean) > /dev/null || true
+(cd linenoise && make clean) > /dev/null || true
+(cd lua && make clean) > /dev/null || true
+(cd jemalloc && [ -f Makefile ] && make distclean) > /dev/null || true
+(rm -f .make-*)
+(echo "" > .make-ldflags)
+(echo "" > .make-cflags)
+[32;1mMAKE[0m [37;1mhiredis[0m
+cd hiredis && make static
+make[2]: Entering directory `/home/mohan/test/redis/redis/deps/hiredis'
+x86_64-arranet-none-gcc -std=c99 -c -O3 -fPIC  -Wall -W -Wstrict-prototypes -Wwrite-strings   net.c
+net.c: In function ‘__redisSetErrorFromErrno’:
+net.c:59:12: warning: variable ‘len’ set but not used [-Wunused-but-set-variable]
+     size_t len = 0;
+            ^
+x86_64-arranet-none-gcc -std=c99 -c -O3 -fPIC  -Wall -W -Wstrict-prototypes -Wwrite-strings   hiredis.c
+In file included from hiredis.c:38:0:
+/home/mohan/test/barrelfish/lib/newlib/newlib/libc/include/ctype.h:45:1: warning: ‘extern’ is not at beginning of declaration [-Wold-style-declaration]
+ extern __IMPORT char *__ctype_ptr__;
+ ^
+hiredis.c: In function ‘chrtos’:
+hiredis.c:226:9: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+         if (isprint(byte))
+         ^
+hiredis.c: In function ‘redisvFormatCommand’:
+hiredis.c:767:21: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                     while (*_p != '\0' && isdigit(*_p)) _p++;
+                     ^
+hiredis.c:772:25: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                         while (*_p != '\0' && isdigit(*_p)) _p++;
+                         ^
+x86_64-arranet-none-gcc -std=c99 -c -O3 -fPIC  -Wall -W -Wstrict-prototypes -Wwrite-strings   sds.c
+In file included from sds.c:34:0:
+/home/mohan/test/barrelfish/lib/newlib/newlib/libc/include/ctype.h:45:1: warning: ‘extern’ is not at beginning of declaration [-Wold-style-declaration]
+ extern __IMPORT char *__ctype_ptr__;
+ ^
+sds.c: In function ‘sdstolower’:
+sds.c:422:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     for (j = 0; j < len; j++) s[j] = tolower(s[j]);
+     ^
+sds.c: In function ‘sdstoupper’:
+sds.c:429:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     for (j = 0; j < len; j++) s[j] = toupper(s[j]);
+     ^
+sds.c: In function ‘sdscatrepr’:
+sds.c:567:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             if (isprint(*p))
+             ^
+sds.c: In function ‘sdssplitargs’:
+sds.c:636:9: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+         while(*p && isspace(*p)) p++;
+         ^
+sds.c:672:25: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                         if (*(p+1) && !isspace(*(p+1))) goto err;
+                         ^
+sds.c:687:25: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                         if (*(p+1) && !isspace(*(p+1))) goto err;
+                         ^
+x86_64-arranet-none-gcc -std=c99 -c -O3 -fPIC  -Wall -W -Wstrict-prototypes -Wwrite-strings   async.c
+In file included from async.c:37:0:
+/home/mohan/test/barrelfish/lib/newlib/newlib/libc/include/ctype.h:45:1: warning: ‘extern’ is not at beginning of declaration [-Wold-style-declaration]
+ extern __IMPORT char *__ctype_ptr__;
+ ^
+async.c: In function ‘__redisGetSubscribeCallback’:
+async.c:328:9: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+         pvariant = (tolower(stype[0]) == 'p') ? 1 : 0;
+         ^
+async.c: In function ‘__redisAsyncCommand’:
+async.c:551:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     pvariant = (tolower(cstr[0]) == 'p') ? 1 : 0;
+     ^
+ar rcs libhiredis.a net.o hiredis.o sds.o async.o
+make[2]: Leaving directory `/home/mohan/test/redis/redis/deps/hiredis'
+[32;1mMAKE[0m [37;1mlinenoise[0m
+cd linenoise && make
+make[2]: Entering directory `/home/mohan/test/redis/redis/deps/linenoise'
+x86_64-arranet-none-gcc  -Wall -Os   -c linenoise.c
+make[2]: Leaving directory `/home/mohan/test/redis/redis/deps/linenoise'
+[32;1mMAKE[0m [37;1mlua[0m
+cd lua/src && make all CFLAGS="-O2 -Wall -DLUA_ANSI " MYLDFLAGS=""
+make[2]: Entering directory `/home/mohan/test/redis/redis/deps/lua/src'
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lapi.o lapi.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lcode.o lcode.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ldebug.o ldebug.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ldo.o ldo.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ldump.o ldump.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lfunc.o lfunc.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lgc.o lgc.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o llex.o llex.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lmem.o lmem.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lobject.o lobject.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lopcodes.o lopcodes.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lparser.o lparser.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lstate.o lstate.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lstring.o lstring.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ltable.o ltable.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ltm.o ltm.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lundump.o lundump.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lvm.o lvm.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lzio.o lzio.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o strbuf.o strbuf.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lauxlib.o lauxlib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lbaselib.o lbaselib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ldblib.o ldblib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o liolib.o liolib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lmathlib.o lmathlib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o loslib.o loslib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o ltablib.o ltablib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lstrlib.o lstrlib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o loadlib.o loadlib.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o linit.o linit.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lua_cjson.o lua_cjson.c
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lua_struct.o lua_struct.c
+lua_struct.c: In function ‘getnum’:
+lua_struct.c:93:3: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+   if (!isdigit(**fmt))  /* no number? */
+   ^
+lua_struct.c:99:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     } while (isdigit(**fmt));
+     ^
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lua_cmsgpack.o lua_cmsgpack.c
+lua_cmsgpack.c: In function ‘table_is_an_array’:
+lua_cmsgpack.c:370:21: warning: variable ‘max’ set but not used [-Wunused-but-set-variable]
+     long count = 0, max = 0, idx = 0;
+                     ^
+ar rcu liblua.a lapi.o lcode.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o strbuf.o lauxlib.o lbaselib.o ldblib.o liolib.o lmathlib.o loslib.o ltablib.o lstrlib.o loadlib.o linit.o lua_cjson.o lua_struct.o lua_cmsgpack.o	# DLL needs all object files
+ranlib liblua.a
+x86_64-arranet-none-gcc -O2 -Wall -DLUA_ANSI    -c -o lua.o lua.c
+x86_64-arranet-none-gcc -o lua  lua.o liblua.a -lm 
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_fcntl':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:323: multiple definition of `lwip_fcntl'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:719: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_listen':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:344: multiple definition of `lwip_listen'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getsockopt':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:349: multiple definition of `lwip_getsockopt'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_setsockopt':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:392: multiple definition of `lwip_setsockopt'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1675: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getsockname':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:438: multiple definition of `lwip_getsockname'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1280: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_ntoa':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:492: multiple definition of `inet_ntoa'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:181: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_aton':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:497: multiple definition of `inet_aton'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:82: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_addr':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:502: multiple definition of `inet_addr'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:61: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_free_tagged':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:509: multiple definition of `pbuf_free_tagged'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:791: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_header':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:514: multiple definition of `pbuf_header'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:668: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_send':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:522: multiple definition of `udp_send'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:349: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_new':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:528: multiple definition of `udp_new'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:853: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_recv':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:542: multiple definition of `udp_recv'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:809: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_remove':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:548: multiple definition of `udp_remove'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:829: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_connect':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:554: multiple definition of `udp_connect'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:724: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_alloc_tagged':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:559: multiple definition of `pbuf_alloc_tagged'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:370: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_record_event_simple':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:565: multiple definition of `lwip_record_event_simple'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:591: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `wrapper_perform_lwip_work':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:571: multiple definition of `wrapper_perform_lwip_work'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:515: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_init_auto':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:577: multiple definition of `lwip_init_auto'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:492: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_mutex_lock':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:587: multiple definition of `lwip_mutex_lock'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/sys_arch.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/sys_arch.c:52: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_mutex_unlock':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:591: multiple definition of `lwip_mutex_unlock'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/sys_arch.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/sys_arch.c:59: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getpeername':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:600: multiple definition of `lwip_getpeername'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1275: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_socket':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1112: multiple definition of `lwip_socket'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:840: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_bind':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1141: multiple definition of `lwip_bind'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_shutdown':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1413: multiple definition of `lwip_shutdown'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1235: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_close':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1480: multiple definition of `lwip_close'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_send':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1512: multiple definition of `lwip_send'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:314: multiple definition of `lwip_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:900: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_connect':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1578: multiple definition of `lwip_connect'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sendmsg':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1661: multiple definition of `lwip_sendmsg'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:835: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sendto':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1094: multiple definition of `lwip_sendto'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:726: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_is_open':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2522: multiple definition of `lwip_sock_is_open'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2297: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_ready_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2540: multiple definition of `lwip_sock_ready_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2261: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_recv':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1022: multiple definition of `lwip_recv'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:680: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:309: multiple definition of `lwip_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:675: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_recvfrom':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1151: multiple definition of `lwip_recvfrom'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:505: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_accept':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1930: multiple definition of `lwip_accept'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_ready_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2601: multiple definition of `lwip_sock_ready_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2282: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_deregister_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2638: multiple definition of `lwip_sock_waitset_deregister_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2311: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_register_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2653: multiple definition of `lwip_sock_waitset_register_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2337: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_deregister_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2689: multiple definition of `lwip_sock_waitset_deregister_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2372: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_register_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2704: multiple definition of `lwip_sock_waitset_register_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2398: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/ip_addr.o:(.rodata+0x14): multiple definition of `ip_addr_broadcast'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/ip_addr.o:(.rodata+0x0): first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/ip_addr.o:(.rodata+0x18): multiple definition of `ip_addr_any'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/ip_addr.o:(.rodata+0x4): first defined here
+collect2: error: ld returned 1 exit status
+make[2]: *** [lua] Error 1
+make[2]: Leaving directory `/home/mohan/test/redis/redis/deps/lua/src'
+make[1]: *** [lua] Error 2
+make[1]: Leaving directory `/home/mohan/test/redis/redis/deps'
+make: [persist-settings] Error 2 (ignored)
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c adlist.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c ae.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c anet.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c dict.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c redis.c
+redis.c: In function ‘processCommand’:
+redis.c:2033:11: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+           tolower(((char*)c->argv[1]->ptr)[0]) == 'n') &&
+           ^
+redis.c:2036:11: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+           tolower(((char*)c->argv[1]->ptr)[0]) == 'k'))
+           ^
+redis.c: In function ‘daemonize’:
+redis.c:2842:9: warning: unused variable ‘fd’ [-Wunused-variable]
+     int fd;
+         ^
+redis.c: In function ‘main’:
+redis.c:2999:9: warning: ‘free’ is deprecated (declared at redis.h:1367) [-Wdeprecated-declarations]
+         free(malloc(128 * 1024 * 1024));    // XXX: Pre-seed malloc()
+         ^
+redis.c:2999:9: warning: ‘malloc’ is deprecated (declared at redis.h:1368) [-Wdeprecated-declarations]
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c sds.c
+sds.c: In function ‘sdstolower’:
+sds.c:422:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     for (j = 0; j < len; j++) s[j] = tolower(s[j]);
+     ^
+sds.c: In function ‘sdstoupper’:
+sds.c:429:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     for (j = 0; j < len; j++) s[j] = toupper(s[j]);
+     ^
+sds.c: In function ‘sdscatrepr’:
+sds.c:567:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             if (isprint(*p))
+             ^
+sds.c: In function ‘sdssplitargs’:
+sds.c:636:9: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+         while(*p && isspace(*p)) p++;
+         ^
+sds.c:672:25: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                         if (*(p+1) && !isspace(*(p+1))) goto err;
+                         ^
+sds.c:687:25: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+                         if (*(p+1) && !isspace(*(p+1))) goto err;
+                         ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c zmalloc.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c lzf_c.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c lzf_d.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c pqsort.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c zipmap.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c sha1.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c ziplist.c
+ziplist.c: In function ‘zipRawEntryLength’:
+ziplist.c:310:41: warning: ‘lensize’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     unsigned int prevlensize, encoding, lensize, len;
+                                         ^
+ziplist.c:310:50: warning: ‘len’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     unsigned int prevlensize, encoding, lensize, len;
+                                                  ^
+ziplist.c: In function ‘ziplistFind’:
+ziplist.c:835:20: warning: ‘len’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 if (len == vlen && memcmp(q, vstr, vlen) == 0) {
+                    ^
+ziplist.c:825:45: warning: ‘lensize’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+         unsigned int prevlensize, encoding, lensize, len;
+                                             ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c release.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c networking.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c util.c
+util.c: In function ‘memtoll’:
+util.c:187:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     while(*u && isdigit(*u)) u++;
+     ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c object.c
+object.c: In function ‘getDoubleFromObject’:
+object.c:443:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             if (isspace(((char*)o->ptr)[0]) ||
+             ^
+object.c: In function ‘getLongDoubleFromObject’:
+object.c:486:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             if (isspace(((char*)o->ptr)[0]) || eptr[0] != '\0' ||
+             ^
+object.c: In function ‘getLongLongFromObject’:
+object.c:524:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             if (isspace(((char*)o->ptr)[0]) || eptr[0] != '\0' ||
+             ^
+object.c: In function ‘getDecodedObject’:
+object.c:354:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+object.c: In function ‘getDoubleFromObject’:
+object.c:456:13: warning: ‘value’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     *target = value;
+             ^
+object.c: In function ‘getLongDoubleFromObject’:
+object.c:486:56: warning: ‘eptr’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+             if (isspace(((char*)o->ptr)[0]) || eptr[0] != '\0' ||
+                                                        ^
+object.c:495:13: warning: ‘value’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     *target = value;
+             ^
+object.c: In function ‘getLongLongFromObject’:
+object.c:533:25: warning: ‘value’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     if (target) *target = value;
+                         ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c db.c
+db.c: In function ‘parseScanCursorOrReply’:
+db.c:354:5: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+     if (isspace(((char*)o->ptr)[0]) || eptr[0] != '\0' || errno == ERANGE)
+     ^
+db.c: In function ‘scanCallback’:
+db.c:339:5: warning: ‘key’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     listAddNodeTail(keys, key);
+     ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c replication.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c rdb.c
+rdb.c: In function ‘rdbSave’:
+rdb.c:694:5: warning: implicit declaration of function ‘fileno’ [-Wimplicit-function-declaration]
+     fsync(fileno(fp));
+     ^
+rdb.c: In function ‘rdbSaveBackground’:
+rdb.c:722:15: warning: variable ‘start’ set but not used [-Wunused-but-set-variable]
+     long long start;
+               ^
+rdb.c:721:11: warning: unused variable ‘childpid’ [-Wunused-variable]
+     pid_t childpid;
+           ^
+rdb.c: In function ‘rdbLoadObject’:
+rdb.c:779:11: warning: ‘o’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+     robj *o, *ele, *dec;
+           ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c t_string.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c t_list.c
+t_list.c: In function ‘listTypeLength’:
+t_list.c:122:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+t_list.c: In function ‘listTypeEqual’:
+t_list.c:244:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c t_set.c
+t_set.c: In function ‘setTypeSize’:
+t_set.c:216:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c t_zset.c
+t_zset.c: In function ‘zuiLength’:
+t_zset.c:1293:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+t_zset.c: In function ‘zuiFind’:
+t_zset.c:1468:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c t_hash.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c config.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c aof.c
+aof.c: In function ‘loadAppendOnlyFile’:
+aof.c:602:5: warning: implicit declaration of function ‘fileno’ [-Wimplicit-function-declaration]
+     if (fp && redis_fstat(fileno(fp),&sb) != -1 && sb.st_size == 0) {
+     ^
+aof.c:647:13: warning: implicit declaration of function ‘ftello’ [-Wimplicit-function-declaration]
+             loadingProgress(ftello(fp));
+             ^
+aof.c: In function ‘rewriteAppendOnlyFileBackground’:
+aof.c:1122:15: warning: variable ‘start’ set but not used [-Wunused-but-set-variable]
+     long long start;
+               ^
+aof.c:1121:11: warning: unused variable ‘childpid’ [-Wunused-variable]
+     pid_t childpid;
+           ^
+aof.c: In function ‘rioWriteBulkObject’:
+aof.c:762:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c pubsub.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c multi.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c debug.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c sort.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c intset.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c syncio.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c migrate.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c endianconv.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c slowlog.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c scripting.c
+scripting.c: In function ‘evalGenericCommand’:
+scripting.c:860:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             funcname[j+2] = tolower(sha[j]);
+             ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c bio.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c rio.c
+rio.c: In function ‘rioFileWrite’:
+rio.c:90:9: warning: implicit declaration of function ‘fileno’ [-Wimplicit-function-declaration]
+         aof_fsync(fileno(r->io.file.fp));
+         ^
+rio.c: In function ‘rioFileTell’:
+rio.c:103:5: warning: implicit declaration of function ‘ftello’ [-Wimplicit-function-declaration]
+     return ftello(r->io.file.fp);
+     ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c rand.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c memtest.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c crc64.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c bitops.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c sentinel.c
+sentinel.c: In function ‘sentinelRunPendingScripts’:
+sentinel.c:671:13: warning: implicit declaration of function ‘execve’ [-Wimplicit-function-declaration]
+             execve(sj->argv[0],sj->argv,environ);
+             ^
+sentinel.c: In function ‘sentinelRefreshInstanceInfo’:
+sentinel.c:1676:13: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+             !memcmp(l,"slave",5) && isdigit(l[5]))
+             ^
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c notify.c
+x86_64-arranet-none-gcc -std=c99 -Wall -O2    -I../deps/hiredis -I../deps/linenoise -I../deps/lua/src -c setproctitle.c
+setproctitle.c: In function ‘spt_copyenv’:
+setproctitle.c:115:3: warning: implicit declaration of function ‘setenv’ [-Wimplicit-function-declaration]
+   error = (0 != setenv(oldenv[i], eq + 1, 1))? errno : 0;
+   ^
+setproctitle.c: In function ‘spt_init’:
+setproctitle.c:150:27: warning: unused variable ‘tmp’ [-Wunused-variable]
+  char *base, *end, *nul, *tmp;
+                           ^
+x86_64-arranet-none-gcc    -rdynamic -o redis-server adlist.o ae.o anet.o dict.o redis.o sds.o zmalloc.o lzf_c.o lzf_d.o pqsort.o zipmap.o sha1.o ziplist.o release.o networking.o util.o object.o db.o replication.o rdb.o t_string.o t_list.o t_set.o t_zset.o t_hash.o config.o aof.o pubsub.o multi.o debug.o sort.o intset.o syncio.o migrate.o endianconv.o slowlog.o scripting.o bio.o rio.o rand.o memtest.o crc64.o bitops.o sentinel.o notify.o setproctitle.o ../deps/hiredis/libhiredis.a ../deps/lua/src/liblua.a -lm  -pthread
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_fcntl':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:323: multiple definition of `lwip_fcntl'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:719: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_listen':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:344: multiple definition of `lwip_listen'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getsockopt':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:349: multiple definition of `lwip_getsockopt'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_setsockopt':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:392: multiple definition of `lwip_setsockopt'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1675: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getsockname':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:438: multiple definition of `lwip_getsockname'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1280: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getaddrinfo':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:451: multiple definition of `lwip_getaddrinfo'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/netdb.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/netdb.c:290: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_freeaddrinfo':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:480: multiple definition of `lwip_freeaddrinfo'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/netdb.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/netdb.c:252: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_ntoa':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:492: multiple definition of `inet_ntoa'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:181: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_aton':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:497: multiple definition of `inet_aton'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:82: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `inet_addr':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:502: multiple definition of `inet_addr'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/inet.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/ipv4/inet.c:61: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_free_tagged':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:509: multiple definition of `pbuf_free_tagged'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:791: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_header':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:514: multiple definition of `pbuf_header'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:668: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_send':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:522: multiple definition of `udp_send'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:349: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_new':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:528: multiple definition of `udp_new'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:853: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_recv':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:542: multiple definition of `udp_recv'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:809: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_remove':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:548: multiple definition of `udp_remove'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:829: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `udp_connect':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:554: multiple definition of `udp_connect'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/udp.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/udp.c:724: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `pbuf_alloc_tagged':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:559: multiple definition of `pbuf_alloc_tagged'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/pbuf.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/pbuf.c:370: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_record_event_simple':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:565: multiple definition of `lwip_record_event_simple'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:591: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `wrapper_perform_lwip_work':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:571: multiple definition of `wrapper_perform_lwip_work'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:515: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_init_auto':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:577: multiple definition of `lwip_init_auto'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/init.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/core/init.c:492: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_mutex_lock':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:587: multiple definition of `lwip_mutex_lock'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/sys_arch.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/sys_arch.c:52: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_mutex_unlock':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:591: multiple definition of `lwip_mutex_unlock'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/sys_arch.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/sys_arch.c:59: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_gethostbyname':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:595: multiple definition of `lwip_gethostbyname'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/netdb.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/netdb.c:83: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_getpeername':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:600: multiple definition of `lwip_getpeername'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1275: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_socket':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1112: multiple definition of `lwip_socket'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:840: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_bind':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1141: multiple definition of `lwip_bind'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_shutdown':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1413: multiple definition of `lwip_shutdown'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:1235: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_close':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1480: multiple definition of `lwip_close'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_send':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1512: multiple definition of `lwip_send'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:314: multiple definition of `lwip_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:900: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_connect':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1578: multiple definition of `lwip_connect'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sendmsg':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1661: multiple definition of `lwip_sendmsg'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:835: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sendto':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1094: multiple definition of `lwip_sendto'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:726: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_is_open':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2522: multiple definition of `lwip_sock_is_open'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2297: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_ready_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2540: multiple definition of `lwip_sock_ready_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2261: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_recv':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1022: multiple definition of `lwip_recv'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:680: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:309: multiple definition of `lwip_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:675: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_recvfrom':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1151: multiple definition of `lwip_recvfrom'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:505: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_accept':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:1930: multiple definition of `lwip_accept'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:208: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_ready_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2601: multiple definition of `lwip_sock_ready_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2282: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_deregister_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2638: multiple definition of `lwip_sock_waitset_deregister_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2311: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_register_read':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2653: multiple definition of `lwip_sock_waitset_register_read'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2337: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_deregister_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2689: multiple definition of `lwip_sock_waitset_deregister_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2372: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/arranet.o: In function `lwip_sock_waitset_register_write':
+/home/mohan/test/barrelfish/build/../lib/arranet/arranet.c:2704: multiple definition of `lwip_sock_waitset_register_write'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/api/sockets.o:/home/mohan/test/barrelfish/build/../lib/lwip/src/api/sockets.c:2398: first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/ip_addr.o:(.rodata+0x14): multiple definition of `ip_addr_broadcast'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/ip_addr.o:(.rodata+0x0): first defined here
+/home/mohan/test/barrelfish/build/x86_64/lib/arranet/_for_lib_arranet/ip_addr.o:(.rodata+0x18): multiple definition of `ip_addr_any'
+/home/mohan/test/barrelfish/build/x86_64/lib/lwip/_for_lib_lwip/src/core/ipv4/ip_addr.o:(.rodata+0x4): first defined here
+collect2: error: ld returned 1 exit status
+make: *** [redis-server] Error 1

@@ -1,0 +1,1559 @@
+arranet/inet_chksum.h:#include "lwip/opt.h"
+arranet/inet_chksum.h:#include "lwip/pbuf.h"
+arranet/inet_chksum.h:#include "lwip/ip_addr.h"
+arranet/inet_chksum.h:#define LWIP_CHKSUM_COPY(dst, src, len) lwip_chksum_copy(dst, src, len)
+arranet/inet_chksum.h:u16_t lwip_chksum_copy(void *dst, const void *src, u16_t len);
+arranet/arranet.c:#include <lwip/sock_chan_support.h>
+arranet/arranet.c:static int lwip_send_time[POSIX_TRANSA];       // Time until packet was delivered to network interface
+arranet/arranet.c:static size_t lwip_send_transactions = 0;
+arranet/arranet.c:int lwip_read(int s, void *mem, size_t len)
+arranet/arranet.c:    return lwip_recv(s, mem, len, 0);
+arranet/arranet.c:int lwip_write(int s, const void *data, size_t size)
+arranet/arranet.c:    return lwip_send(s, data, size, 0);
+arranet/arranet.c:int lwip_fcntl(int s, int cmd, int val)
+arranet/arranet.c:int lwip_listen(int s, int backlog)
+arranet/arranet.c:int lwip_getsockopt(int s, int level, int optname, void *optval, socklen_t *optlen)
+arranet/arranet.c:int lwip_setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen)
+arranet/arranet.c:int lwip_getsockname(int s, struct sockaddr *name, socklen_t *namelen)
+arranet/arranet.c:int lwip_getaddrinfo(const char *nodename, const char *servname,
+arranet/arranet.c:void lwip_freeaddrinfo(struct addrinfo *ai)
+arranet/arranet.c:void lwip_record_event_simple(uint8_t event_type, uint64_t ts);
+arranet/arranet.c:void lwip_record_event_simple(uint8_t event_type, uint64_t ts)
+arranet/arranet.c:uint64_t wrapper_perform_lwip_work(void);
+arranet/arranet.c:uint64_t wrapper_perform_lwip_work(void)
+arranet/arranet.c:bool lwip_init_auto(void);
+arranet/arranet.c:bool lwip_init_auto(void)
+arranet/arranet.c:struct thread_mutex *lwip_mutex = NULL;
+arranet/arranet.c:struct waitset *lwip_waitset = NULL;
+arranet/arranet.c:void lwip_mutex_lock(void)
+arranet/arranet.c:void lwip_mutex_unlock(void)
+arranet/arranet.c:struct hostent *lwip_gethostbyname(const char *name)
+arranet/arranet.c:int lwip_getpeername(int s, struct sockaddr *name, socklen_t *namelen)
+arranet/arranet.c:    if(lwip_send_transactions < POSIX_TRANSA) {
+arranet/arranet.c:                lwip_send_time[lwip_send_transactions] = get_time() - mypayload->message.header.response.opaque;
+arranet/arranet.c:                lwip_send_transactions++;
+arranet/arranet.c:                lwip_send_time[lwip_send_transactions] = get_time() - mypayload->message.header.request.opaque;
+arranet/arranet.c:                lwip_send_transactions++;
+arranet/arranet.c:int lwip_recv(int s, void *mem, size_t len, int flags)
+arranet/arranet.c:    /* printf("lwip_recv(%d)\n", s); */
+arranet/arranet.c:    if (lwip_sock_ready_read(s)) {
+arranet/arranet.c:        /* printf("lwip_recv: Assigning %p, %x\n", sock, sock->next_ack); */
+arranet/arranet.c:    /* printf("lwip_recv returned %d\n", args.recv_len); */
+arranet/arranet.c:int lwip_sendto(int s, const void *data, size_t size, int flags,
+arranet/arranet.c:    return lwip_sendmsg(s, &msg, flags);
+arranet/arranet.c:int lwip_socket(int domain, int type, int protocol)
+arranet/arranet.c:    /* printf("lwip_socket() = %d\n", sock->fd); */
+arranet/arranet.c:int lwip_bind(int s, const struct sockaddr *name, socklen_t namelen)
+arranet/arranet.c:int lwip_recvfrom(int sockfd, void *buf, size_t len, int flags,
+arranet/arranet.c:    if (lwip_sock_ready_read(sockfd)) {
+arranet/arranet.c:    if (lwip_sock_ready_read(e->fd)) {
+arranet/arranet.c:int lwip_shutdown(int s, int how)
+arranet/arranet.c:    /* printf("lwip_shutdown(%d)\n", s); */
+arranet/arranet.c:    /* printf("lwip_shutdown: Sending %p, seq %x, ack %x\n", sock, sock->my_seq - 1, sock->next_ack); */
+arranet/arranet.c:int lwip_close(int s)
+arranet/arranet.c:    lwip_shutdown(s, SHUT_RDWR);
+arranet/arranet.c:int lwip_send(int s, const void *data, size_t size, int flags)
+arranet/arranet.c:    /* printf("lwip_send(%d, , %zu)\n", s, size); */
+arranet/arranet.c:    /* printf("lwip_send: Assigning %p, seq %x\n", sock, sock->my_seq); */
+arranet/arranet.c:    /* printf("lwip_send: Sending %p, %x\n", sock, sock->next_ack); */
+arranet/arranet.c:int lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
+arranet/arranet.c:    /* printf("lwip_connect(%d)\n", s); */
+arranet/arranet.c:    /* printf("lwip_connect: Assigning %p seq %x\n", sock, sock->my_seq); */
+arranet/arranet.c:int lwip_sendmsg(int sockfd, const struct msghdr *msg, int flags)
+arranet/arranet.c:int lwip_sendmsg(int sockfd, const struct msghdr *msg, int flags)
+arranet/arranet.c:int lwip_accept(int s, struct sockaddr *addr, socklen_t *addrlen)
+arranet/arranet.c:    if (lwip_sock_ready_read(s)) {
+arranet/arranet.c:    /* printf("lwip_accept: Assigning %p seq %x\n", newsock, newsock->my_seq); */
+arranet/arranet.c:    /* printf("lwip_accept: Assigning %p seq %x\n", newsock, newsock->my_seq); */
+arranet/arranet.c:    /* printf("lwip_accept: Assigning %p, %x\n", newsock, newsock->next_ack); */
+arranet/arranet.c:    /* printf("lwip_accept: Sending %p, %x\n", newsock, newsock->next_ack); */
+arranet/arranet.c:    /* printf("lwip_accept(%d) = %d\n", s, newsock->fd); */
+arranet/arranet.c:                printf("lwip_send_transa = %zu\n", lwip_send_transactions);
+arranet/arranet.c:                printf("lwip_send_transactions:\n");
+arranet/arranet.c:                for(int i = 0; i < lwip_send_transactions; i++) {
+arranet/arranet.c:                    printf("%u us\n", lwip_send_time[i]);
+arranet/arranet.c:                lwip_send_transactions = 0;
+arranet/arranet.c:bool lwip_sock_is_open(int s)
+arranet/arranet.c:bool lwip_sock_ready_read(int s)
+arranet/arranet.c:        /* printf("lwip_sock_ready_read(%d)\n", s); */
+arranet/arranet.c:bool lwip_sock_ready_write(int s)
+arranet/arranet.c:        /* printf("lwip_sock_ready_write(%d)\n", s); */
+arranet/arranet.c:errval_t lwip_sock_waitset_deregister_read(int sock)
+arranet/arranet.c:errval_t lwip_sock_waitset_register_read(int sock, struct waitset *ws)
+arranet/arranet.c:    if (lwip_sock_ready_read(sock)) {
+arranet/arranet.c:errval_t lwip_sock_waitset_deregister_write(int sock)
+arranet/arranet.c:errval_t lwip_sock_waitset_register_write(int sock, struct waitset *ws)
+arranet/arranet.c:    if (lwip_sock_ready_write(sock)) {
+arranet/arranet.c:void lwip_arrakis_start(int *argc, char ***argv)
+arranet/inet_chksum.c:#include "lwip/opt.h"
+arranet/inet_chksum.c:#include "lwip/def.h"
+arranet/inet_chksum.c:# define LWIP_CHKSUM lwip_standard_chksum
+arranet/inet_chksum.c: * lwip checksum
+arranet/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+arranet/inet_chksum.c:lwip_standard_chksum(void *dataptr, u16_t len)
+arranet/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+arranet/inet_chksum.c:lwip_standard_chksum(void *dataptr, int len)
+arranet/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+arranet/inet_chksum.c:lwip_standard_chksum(void *dataptr, int len)
+arranet/inet_chksum.c:    /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): unwrapped lwip_chksum()=%"X32_F" \n", acc));*/
+arranet/inet_chksum.c:    /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): wrapped lwip_chksum()=%"X32_F" \n", acc));*/
+arranet/inet_chksum.c:  LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): pbuf chain lwip_chksum()=%"X32_F"\n", acc));
+arranet/inet_chksum.c:    /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): unwrapped lwip_chksum()=%"X32_F" \n", acc));*/
+arranet/inet_chksum.c:    /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): wrapped lwip_chksum()=%"X32_F" \n", acc));*/
+arranet/inet_chksum.c:  LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): pbuf chain lwip_chksum()=%"X32_F"\n", acc));
+arranet/inet_chksum.c: * in assembly targeted at your hardware by defining it in lwipopts.h:
+arranet/inet_chksum.c:lwip_chksum_copy(void *dst, const void *src, u16_t len)
+arranet/ip_addr.c:#include "lwip/opt.h"
+arranet/ip_addr.c:#include "lwip/ip_addr.h"
+arranet/ip_addr.c:#include "lwip/netif.h"
+arranet/ip_addr.c:  u32_t nm_hostorder = lwip_htonl(netmask);
+bulk_transfer/backends/net/bulk_net_transparent.c:#include <ipv4/lwip/inet.h>
+bulk_transfer/backends/net/bulk_net_e10k.c:#include <ipv4/lwip/inet.h>
+bulk_transfer/backends/net/bulk_net_proxy.c:#include <ipv4/lwip/inet.h>
+bulk_transfer/backends/net/bulk_net_transfer.h:#include <ipv4/lwip/inet.h>
+bulk_transfer/backends/net/bulk_net_no_copy.c:#include <ipv4/lwip/inet.h>
+bulk_transfer/backends/net/bulk_net_transfer.c:#include <ipv4/lwip/inet.h>
+lwip/CHANGELOG:  * ipv4/inet_chksum.c, ipv4/lwip/inet_chksum.h: inet_chksum_pseudo_partial()
+lwip/CHANGELOG:  * sockets.c (lwip_accept): Return EWOULDBLOCK if would block on non-blocking
+lwip/CHANGELOG:  * sockets.c: bug #26405: Prematurely released semaphore causes lwip_select()
+lwip/CHANGELOG:  * init.c: snmp was not initialized in lwip_init()
+lwip/CHANGELOG:  * sockets.c: tried to fix bug #23559: lwip_recvfrom problem with tcp
+lwip/CHANGELOG:  * sockets.c: fixed bug #25051: lwip_recvfrom problem with udp: fromaddr and
+lwip/CHANGELOG:  * sockets.c (lwip_accept): check addr isn't NULL. If it's valid, do an
+lwip/CHANGELOG:    in lwipopts.h or use pbuf_free_callback(p)/mem_free_callback(m) to free pbufs
+lwip/CHANGELOG:    made from lwipopts.h. Fix comment on how to override LWIP_CHKSUM.
+lwip/CHANGELOG:  * netdb.h, netdb.c, sockets.h/.c: Moved lwip_gethostbyname from sockets.c
+lwip/CHANGELOG:    to the new file netdb.c; included lwip_getaddrinfo.
+lwip/CHANGELOG:    requests with RAW api interface. Initialization is done in lwip_init() with
+lwip/CHANGELOG:    in your lwipopts.h file (LWIP_DNS=0 in opt.h). DNS_DEBUG can be set to get
+lwip/CHANGELOG:    RAW netconn. You need to set LWIP_SO_RCVBUF=1 in your lwipopts.h (it's disabled
+lwip/CHANGELOG:    the problem for FIONREAD with lwip_ioctl/ioctlsocket).
+lwip/CHANGELOG:    your lwipopts.h. For port maintainers, you can just add these new parameters
+lwip/CHANGELOG:  * init.c: Add first version of lwip_sanity_check for task #7142 "Sanity check
+lwip/CHANGELOG:  * Add init.h, init.c, Change opt.h, tcpip.c: Task  #7213 "Add a lwip_init function"
+lwip/CHANGELOG:    Add lwip_init function to regroup all modules initializations, and to provide
+lwip/CHANGELOG:    and add init.c in their makefiles. Note that lwip_init() function is called
+lwip/CHANGELOG:    in opt.h, you should configure in your lwipopts.h (they are enabled per default).
+lwip/CHANGELOG:    settings into new memp_std.h and optional user file lwippools.h. This adds
+lwip/CHANGELOG:  * sockets.c: lwip_accept(): check netconn_peer() error return.
+lwip/CHANGELOG:    Improved lwip_recvfrom().  TCP push now propagated.
+lwip/CHANGELOG:    used from lwip_send).
+lwip/CHANGELOG:    footprint. Disable some part of lwip_send and lwip_sendto if some options are
+lwip/CHANGELOG:  * sockets.c, api.h, api_lib.c, api_msg.h, api_msg.c: Fix bug #19162 "lwip_sento: a possible
+lwip/CHANGELOG:    netbuf (if we receive lot of datagrams). Improve lwip_sendto (only one exchange between
+lwip/CHANGELOG:    your lwipopts.h. More, unused counters are not defined in the stats structs, and not 
+lwip/CHANGELOG:    lwip_socket_init() function.
+lwip/CHANGELOG:    updated to call lwip_socket_init() now.
+lwip/CHANGELOG:  * sockets.c: Fix bug #22435 "lwip_recvfrom with TCP break;". Using
+lwip/CHANGELOG:    (lwip_)recvfrom with valid "from" and "fromlen" parameters, on a
+lwip/CHANGELOG:    TCP connection caused a crash. Note that using (lwip_)recvfrom
+lwip/CHANGELOG:    like this is a bit slow and that using (lwip)getpeername is the
+lwip/CHANGELOG:    good lwip way to do it (so, using recv is faster on tcp sockets).
+lwip/CHANGELOG:    LWIP_SOCKET=1, the code did the wrong supposition that lwip_recvfrom
+lwip/CHANGELOG:    has to be set to 0 in lwipopts.h
+lwip/CHANGELOG:    reduce a little bit the footprint for socket layer (lwip_getpeername &
+lwip/CHANGELOG:    lwip_getsockname use now a common lwip_getaddrname function since 
+lwip/CHANGELOG:  * mem.c: Fixed bug #21077 (inaccuracy in calculation of lwip_stat.mem.used)
+lwip/CHANGELOG:  * several-files: replace some #include "arch/cc.h" by "lwip/arch.h", or simply remove
+lwip/CHANGELOG:    it as long as "lwip/opt.h" is included before (this one include "lwip/debug.h" which
+lwip/CHANGELOG:    already include "lwip/arch.h"). Like that, default defines are provided by "lwip/arch.h"
+lwip/CHANGELOG:    if they are not defined in cc.h, in the same spirit than "lwip/opt.h" for lwipopts.h.
+lwip/CHANGELOG:    possible to define this macro in your own lwipopts.h to always use C library's
+lwip/CHANGELOG:    for socket options (lwip_set/-getsockopt) used with level IPPROTO_TCP from
+lwip/CHANGELOG:    result and can cause a crash. lwip_send now check netbuf_ref result.
+lwip/CHANGELOG:    definition of macros (in errno.h and lwip/arch.h) if LWIP_PROVIDE_ERRNO is
+lwip/CHANGELOG:    lwip_close.
+lwip/CHANGELOG:    call to "lwip_stats.link.recv++;" in low_level_input() & ethernetif_input().
+lwip/CHANGELOG:    to include/lwip/opt.h.
+lwip/CHANGELOG:  * ipv4/lwip/ip_frag.h: Remove unused IP_REASS_INTERVAL.
+lwip/CHANGELOG:    Move IP_REASS_MAXAGE and IP_REASS_BUFSIZE to include/lwip/opt.h.
+lwip/CHANGELOG:  * include/lwip/snmp_structs.h: added
+lwip/CHANGELOG:  * include/lwip/snmp_asn1.h added
+lwip/CHANGELOG:  * include/lwip/snmp_msg.h added
+lwip/CHANGELOG:  * ipv4/lwip/ip.h ipv6/lwip/ip.h: Corrected UDP-Lite protocol
+lwip/CHANGELOG:    lwipopts.h.
+lwip/CHANGELOG:    now kept in a single header file "lwipopts.h".
+lwip/doc/savannah.txt:cvs -z3 -d:pserver:anonymous@cvs.sv.gnu.org:/sources/lwip checkout lwip
+lwip/doc/savannah.txt:cvs -z3 -d:pserver:anonymous@cvs.sv.gnu.org:/sources/lwip checkout \
+lwip/doc/savannah.txt:  -r STABLE-0_7 -d lwip-0.7 lwip
+lwip/doc/savannah.txt:cvs -z3 -d:pserver:anonymous@cvs.sv.gnu.org:/sources/lwip checkout \
+lwip/doc/savannah.txt:  -r STABLE-0_7_0 -d lwip-0.7.0 lwip
+lwip/doc/savannah.txt:cvs -z3 -d:ext:your_login@cvs.sv.gnu.org:/sources/lwip co lwip
+lwip/doc/savannah.txt:changes on the repository. If in doubt, ask on the lwip-members mailing list.
+lwip/doc/savannah.txt: fingerprint against http://savannah.nongnu.org/cvs/?group=lwip)
+lwip/doc/savannah.txt:cvs rtag -F -r DEVEL merged_from_DEVEL_to_main lwip 
+lwip/doc/savannah.txt:cvs -z3 -d:pserver:anonymous@cvs.sv.gnu.org:/sources/lwip checkout \
+lwip/doc/savannah.txt:  -r STABLE-0_6_3 -d lwip-0.6.3 lwip
+lwip/doc/savannah.txt:tar czvf lwip-0.6.3.tar.gz lwip-0.6.3
+lwip/doc/savannah.txt:tar cjvf lwip-0.6.3.tar.bz2 lwip-0.6.3
+lwip/doc/savannah.txt:zip -r lwip-0.6.3.zip lwip-0.6.3
+lwip/doc/savannah.txt:gpg -b lwip-0.6.3.tar.gz
+lwip/doc/savannah.txt:gpg -b lwip-0.6.3.tar.bz2
+lwip/doc/savannah.txt:gpg -b lwip-0.6.3.zip
+lwip/doc/savannah.txt:ncftp ftp://savannah.gnu.org/incoming/savannah/lwip
+lwip/doc/savannah.txt:http://savannah.nongnu.org/files/?group=lwip&highlight=0.6.3
+lwip/doc/rawapi.txt:  To use it, your need to set TCP_LISTEN_BACKLOG=1 in your lwipopts.h.
+lwip/doc/rawapi.txt:  in lwipopts.h. The number of bytes available in the output queue can
+lwip/doc/rawapi.txt:A truly complete and generic sequence for initializing the lwip stack
+lwip/doc/rawapi.txt:cannot be given because it depends on the build configuration (lwipopts.h)
+lwip/doc/rawapi.txt:  Not of much use since we set the NO_SYS 1 option in lwipopts.h,
+lwip/doc/rawapi.txt:  For ethernet drivers, the input function pointer must point to the lwip
+lwip/doc/rawapi.txt:  must use ip_input() declared in "lwip/ip.h".
+lwip/doc/rawapi.txt:The first thing you want to optimize is the lwip_standard_checksum()
+lwip/doc/contrib.txt:   can go to the lwip-users list. This is still the fastest way of interaction and the list is not so crowded
+lwip/doc/sys_arch.txt:macros used throughout lwip.  The files required and the macros they
+lwip/doc/sys_arch.txt:  in your lwipopts.h, or ignore this parameter in your implementation
+lwip/doc/sys_arch.txt:  Typedefs for the types used by lwip -
+lwip/doc/sys_arch.txt:  Compiler hints for packing lwip's structures -
+lwip/doc/sys_arch.txt:  to make lwip/arch.h define the codes which are used throughout.
+lwip/doc/sys_arch.txt:  Measurement calls made throughout lwip, these can be defined to nothing.
+lwip/doc/snmp_agent.txt:to your local lwipopts.h:
+lwip/doc/snmp_agent.txt:and add the source files in lwip/src/core/snmp
+lwip/doc/snmp_agent.txt:and some snmp headers in lwip/src/include/lwip to your makefile.
+lwip/doc/snmp_agent.txt:add the following define to your local lwipopts.h:
+lwip/doc/snmp_agent.txt:contrib/ports/unix/proj/minimal/lwip_prvmib.c
+lwip/README.barrelfish:URL: http://savannah.nongnu.org/projects/lwip/
+lwip/README.barrelfish:  1. Call 'lwip_init_auto' or one of its variants.
+lwip/README.barrelfish:     service events on 'lwip_waitset'.
+lwip/README.barrelfish:    http://lwip.wikia.com/
+lwip/README.barrelfish:     http://lwip.wikia.com/wiki/Application_API_layers
+lwip/README.barrelfish:    http://git.savannah.gnu.org/cgit/lwip.git/tree/doc/rawapi.txt
+lwip/README.barrelfish:    http://lwip.wikia.com/wiki/Raw/native_API
+lwip/README.barrelfish:    http://lwip.wikia.com/wiki/Raw/TCP
+lwip/README.barrelfish:  http://lists.gnu.org/archive/html/lwip-users/2010-04/msg00055.html)
+lwip/README.barrelfish:  - include/lwip/barrelfish.h, src/barrelfish/*
+lwip/README.barrelfish:      http://git.savannah.gnu.org/cgit/lwip.git/tree/doc/sys_arch.txt
+lwip/README.barrelfish:      http://lwip.wikia.com/wiki/Porting_for_an_OS
+lwip/README.barrelfish:      http://git.savannah.gnu.org/cgit/lwip/lwip-contrib.git/tree/ports
+lwip/README.barrelfish:  - include/lwip/sock_serialise.h
+lwip/README.barrelfish:    (see //include/lwip/opt.h)
+lwip/README:The lwIP TCP/IP stack is maintained in the 'lwip' CVS module and
+lwip/README:  http://savannah.gnu.org/cvs.backups/lwip.tar.gz [CHANGED - NEEDS FIXING]
+lwip/README:  http://savannah.nongnu.org/cgi-bin/viewcvs/lwip/lwip/
+lwip/README:  http://savannah.nongnu.org/cgi-bin/viewcvs/lwip/contrib/
+lwip/README:  http://savannah.nongnu.org/projects/lwip/
+lwip/README:  http://www.sics.se/~adam/lwip/
+lwip/README:  http://www.nongnu.org/lwip/
+lwip/README:  http://lwip.scribblewiki.com/
+lwip/README:  http://savannah.nongnu.org/mail/?group=lwip
+lwip/README:  http://lists.nongnu.org/archive/html/lwip-users/
+lwip/README:  http://lists.nongnu.org/archive/html/lwip-devel/
+lwip/src/api/api_lib.c:#include "lwip/opt.h"
+lwip/src/api/api_lib.c:#if LWIP_NETCONN                /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/api_lib.c:#include "lwip/api.h"
+lwip/src/api/api_lib.c:#include "lwip/tcpip.h"
+lwip/src/api/api_lib.c:#include "lwip/memp.h"
+lwip/src/api/api_lib.c:#include "lwip/ip.h"
+lwip/src/api/api_lib.c:#include "lwip/raw.h"
+lwip/src/api/api_lib.c:#include "lwip/udp.h"
+lwip/src/api/api_lib.c:#include "lwip/tcp.h"
+lwip/src/api/api_lib.c:    lwip_mutex_unlock();
+lwip/src/api/api_lib.c:    lwip_mutex_lock();
+lwip/src/api/api_lib.c:        lwip_mutex_unlock();
+lwip/src/api/api_lib.c:        lwip_mutex_lock();
+lwip/src/api/api_lib.c:        lwip_mutex_unlock();
+lwip/src/api/api_lib.c:        lwip_mutex_lock();
+lwip/src/api/netbuf.c:#include "lwip/opt.h"
+lwip/src/api/netbuf.c:#if LWIP_NETCONN                /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/netbuf.c:#include "lwip/netbuf.h"
+lwip/src/api/netbuf.c:#include "lwip/memp.h"
+lwip/src/api/tcpip.c:#include "lwip/opt.h"
+lwip/src/api/tcpip.c:#if !NO_SYS                     /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/tcpip.c:#include "lwip/sys.h"
+lwip/src/api/tcpip.c:#include "lwip/memp.h"
+lwip/src/api/tcpip.c:#include "lwip/pbuf.h"
+lwip/src/api/tcpip.c:#include "lwip/ip_frag.h"
+lwip/src/api/tcpip.c:#include "lwip/tcp.h"
+lwip/src/api/tcpip.c:#include "lwip/autoip.h"
+lwip/src/api/tcpip.c:#include "lwip/dhcp.h"
+lwip/src/api/tcpip.c:#include "lwip/igmp.h"
+lwip/src/api/tcpip.c:#include "lwip/dns.h"
+lwip/src/api/tcpip.c:#include "lwip/tcpip.h"
+lwip/src/api/tcpip.c:#include "lwip/init.h"
+lwip/src/api/tcpip.c:    lwip_init_auto();
+lwip/src/api/sockets.c:#include "lwip/opt.h"
+lwip/src/api/sockets.c:#if LWIP_SOCKET                 /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/sockets.c:#include "lwip/sockets.h"
+lwip/src/api/sockets.c:#include "lwip/api.h"
+lwip/src/api/sockets.c:#include "lwip/sys.h"
+lwip/src/api/sockets.c:#include "lwip/igmp.h"
+lwip/src/api/sockets.c:#include "lwip/inet.h"
+lwip/src/api/sockets.c:#include "lwip/tcp.h"
+lwip/src/api/sockets.c:#include "lwip/raw.h"
+lwip/src/api/sockets.c:#include "lwip/udp.h"
+lwip/src/api/sockets.c:#include "lwip/tcpip.h"
+lwip/src/api/sockets.c:#include "lwip/sock_serialise.h"
+lwip/src/api/sockets.c:# include "lwip/sock_chan_support.h"
+lwip/src/api/sockets.c:struct lwip_socket {
+lwip/src/api/sockets.c:struct lwip_select_cb {
+lwip/src/api/sockets.c:    struct lwip_select_cb *next;
+lwip/src/api/sockets.c:struct lwip_setgetsockopt_data {
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:static struct lwip_socket sockets[NUM_SOCKETS];
+lwip/src/api/sockets.c:static struct lwip_select_cb *select_cb_list;
+lwip/src/api/sockets.c:static void lwip_getsockopt_internal(void *arg);
+lwip/src/api/sockets.c:static void lwip_setsockopt_internal(void *arg);
+lwip/src/api/sockets.c:void lwip_socket_init(void)
+lwip/src/api/sockets.c: * @return struct lwip_socket for the socket or NULL if not found
+lwip/src/api/sockets.c:static struct lwip_socket *get_socket(int s)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:int lwip_accept(int s, struct sockaddr *addr, socklen_t * addrlen)
+lwip/src/api/sockets.c:    struct lwip_socket *sock, *nsock;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_accept(%d)...\n", s));
+lwip/src/api/sockets.c:                    ("lwip_accept(%d): returning EWOULDBLOCK\n", s));
+lwip/src/api/sockets.c:                    ("lwip_accept(%d) failed, err=%d\n", s, sock->conn->err));
+lwip/src/api/sockets.c:                ("lwip_accept(%d) returning new sock=%d addr=", s, newsock));
+lwip/src/api/sockets.c:int lwip_bind(int s, const struct sockaddr *name, socklen_t namelen)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_ERROR("lwip_bind: invalid address",
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_bind(%d, addr=", s));
+lwip/src/api/sockets.c:        LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_bind(%d) failed, err=%d\n", s, err));
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_bind(%d) succeeded\n", s));
+lwip/src/api/sockets.c:int lwip_close(int s)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_close(%d)\n", s));
+lwip/src/api/sockets.c:int lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_ERROR("lwip_connect: invalid address",
+lwip/src/api/sockets.c:        LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_connect(%d, AF_UNSPEC)\n", s));
+lwip/src/api/sockets.c:        LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_connect(%d, addr=", s));
+lwip/src/api/sockets.c:                    ("lwip_connect(%d) failed, err=%d\n", s, err));
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_connect(%d) succeeded\n", s));
+lwip/src/api/sockets.c:int lwip_listen(int s, int backlog)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_listen(%d, backlog=%d)\n", s, backlog));
+lwip/src/api/sockets.c:                    ("lwip_listen(%d) failed, err=%d\n", s, err));
+lwip/src/api/sockets.c:lwip_recvfrom(int s, void *mem, size_t len, int flags,
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:                ("lwip_recvfrom(%d, %p, %" SZT_F ", 0x%x, ..)\n", s, mem, len,
+lwip/src/api/sockets.c:                    ("lwip_recvfrom: top while sock->lastdata=%p\n",
+lwip/src/api/sockets.c:                            ("lwip_recvfrom(%d): returning EWOULDBLOCK\n", s));
+lwip/src/api/sockets.c:                        ("lwip_recvfrom: netconn_recv netbuf=%p\n",
+lwip/src/api/sockets.c:                            ("lwip_recvfrom(%d): buf == NULL!\n", s));
+lwip/src/api/sockets.c:                    ("lwip_recvfrom: buflen=%" U16_F " len=%" SZT_F " off=%"
+lwip/src/api/sockets.c:                LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_recvfrom(%d): addr=", s));
+lwip/src/api/sockets.c:                LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_recvfrom(%d): addr=", s));
+lwip/src/api/sockets.c:                            ("lwip_recvfrom: lastdata now netbuf=%p\n",
+lwip/src/api/sockets.c:                            ("lwip_recvfrom: deleting netbuf=%p\n",
+lwip/src/api/sockets.c:int lwip_read(int s, void *mem, size_t len)
+lwip/src/api/sockets.c:    return lwip_recvfrom(s, mem, len, 0, NULL, NULL);
+lwip/src/api/sockets.c:int lwip_recv(int s, void *mem, size_t len, int flags)
+lwip/src/api/sockets.c:    return lwip_recvfrom(s, mem, len, flags, NULL, NULL);
+lwip/src/api/sockets.c:int lwip_send(int s, const void *data, size_t size, int flags)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:                ("lwip_send(%d, data=%p, size=%" SZT_F ", flags=0x%x)\n", s,
+lwip/src/api/sockets.c:        return lwip_sendto(s, data, size, flags, NULL, 0);
+lwip/src/api/sockets.c:                ("lwip_send(%d) err=%d size=%" SZT_F "\n", s, err, size));
+lwip/src/api/sockets.c:lwip_fcntl(int fd, int cmd, int val)
+lwip/src/api/sockets.c:lwip_sendto(int s, const void *data, size_t size, int flags,
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:        return lwip_send(s, data, size, flags);
+lwip/src/api/sockets.c:    LWIP_ASSERT("lwip_sendto: size must fit in u16_t", size <= 0xffff);
+lwip/src/api/sockets.c:    LWIP_ERROR("lwip_sendto: invalid address",
+lwip/src/api/sockets.c:                ("lwip_sendto(%d, data=%p, short_size=%d" U16_F
+lwip/src/api/sockets.c:int lwip_sendmsg(int sockfd, const struct msghdr *msg, int flags)
+lwip/src/api/sockets.c:int lwip_socket(int domain, int type, int protocol)
+lwip/src/api/sockets.c:                        ("lwip_socket(%s, SOCK_RAW, %d) = ",
+lwip/src/api/sockets.c:                        ("lwip_socket(%s, SOCK_DGRAM, %d) = ",
+lwip/src/api/sockets.c:            LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_socket(%s, SOCK_STREAM, %d) = ",
+lwip/src/api/sockets.c:                        ("lwip_socket(%d, %d/UNKNOWN, %d) = -1\n", domain, type,
+lwip/src/api/sockets.c:int lwip_write(int s, const void *data, size_t size)
+lwip/src/api/sockets.c:    return lwip_send(s, data, size, 0);
+lwip/src/api/sockets.c:lwip_selscan(int maxfdp1, fd_set * readset, fd_set * writeset,
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:                            ("lwip_selscan: fd=%d ready for reading\n", i));
+lwip/src/api/sockets.c:                            ("lwip_selscan: fd=%d ready for writing\n", i));
+lwip/src/api/sockets.c:lwip_select(int maxfdp1, fd_set * readset, fd_set * writeset,
+lwip/src/api/sockets.c:    struct lwip_select_cb select_cb;
+lwip/src/api/sockets.c:    struct lwip_select_cb *p_selcb;
+lwip/src/api/sockets.c:                ("lwip_select(%d, %p, %p, %p, tvsec=%ld tvusec=%ld)\n", maxfdp1,
+lwip/src/api/sockets.c:    nready = lwip_selscan(maxfdp1, &lreadset, &lwriteset, &lexceptset);
+lwip/src/api/sockets.c:                        ("lwip_select: no timeout, returning 0\n"));
+lwip/src/api/sockets.c:        lwip_mutex_unlock();
+lwip/src/api/sockets.c:        lwip_mutex_lock();
+lwip/src/api/sockets.c:            LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_select: timeout expired\n"));
+lwip/src/api/sockets.c:        nready = lwip_selscan(maxfdp1, &lreadset, &lwriteset, &lexceptset);
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_select: nready=%d\n", nready));
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    struct lwip_select_cb *scb;
+lwip/src/api/sockets.c:int lwip_shutdown(int s, int how)
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_shutdown(%d, how=%d)\n", s, how));
+lwip/src/api/sockets.c:    return lwip_close(s);       /* XXX temporary hack until proper implementation */
+lwip/src/api/sockets.c:lwip_getaddrname(int s, struct sockaddr *name, socklen_t * namelen, u8_t local)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_getaddrname(%d, addr=", s));
+lwip/src/api/sockets.c:int lwip_getpeername(int s, struct sockaddr *name, socklen_t * namelen)
+lwip/src/api/sockets.c:    return lwip_getaddrname(s, name, namelen, 0);
+lwip/src/api/sockets.c:int lwip_getsockname(int s, struct sockaddr *name, socklen_t * namelen)
+lwip/src/api/sockets.c:    return lwip_getaddrname(s, name, namelen, 1);
+lwip/src/api/sockets.c:lwip_getsockopt(int s, int level, int optname, void *optval, socklen_t * optlen)
+lwip/src/api/sockets.c:    struct lwip_socket *sock = get_socket(s);
+lwip/src/api/sockets.c:    struct lwip_setgetsockopt_data data;
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, SOL_SOCKET, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_TCP, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_UDPLITE, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                        ("lwip_getsockopt(%d, level=0x%x, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:    tcpip_callback(lwip_getsockopt_internal, &data);
+lwip/src/api/sockets.c:    /* maybe lwip_getsockopt_internal has changed err */
+lwip/src/api/sockets.c:static void lwip_getsockopt_internal(void *arg)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    struct lwip_setgetsockopt_data *data;
+lwip/src/api/sockets.c:    data = (struct lwip_setgetsockopt_data *) arg;
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, SOL_SOCKET, optname=0x%x, ..) = %s\n",
+lwip/src/api/sockets.c:                                        ("lwip_getsockopt(%d, SOL_SOCKET, SO_TYPE): unrecognized socket type %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, SOL_SOCKET, SO_TYPE) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, SOL_SOCKET, SO_ERROR) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, IP_TTL) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, IP_TOS) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, IP_MULTICAST_TTL) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, IP_MULTICAST_IF) = 0x%"
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_TCP, TCP_NODELAY) = %s\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, TCP_KEEPALIVE) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, TCP_KEEPIDLE) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, TCP_KEEPINTVL) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_IP, TCP_KEEPCNT) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_UDPLITE, UDPLITE_SEND_CSCOV) = %d\n",
+lwip/src/api/sockets.c:                                ("lwip_getsockopt(%d, IPPROTO_UDPLITE, UDPLITE_RECV_CSCOV) = %d\n",
+lwip/src/api/sockets.c:lwip_setsockopt(int s, int level, int optname, const void *optval,
+lwip/src/api/sockets.c:    struct lwip_socket *sock = get_socket(s);
+lwip/src/api/sockets.c:    struct lwip_setgetsockopt_data data;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_setsockopt: sock is %d\n", sock));
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, SOL_SOCKET, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_IP, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_UDPLITE, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:                        ("lwip_setsockopt(%d, level=0x%x, UNIMPL: optname=0x%x, ..)\n",
+lwip/src/api/sockets.c:    tcpip_callback(lwip_setsockopt_internal, &data);
+lwip/src/api/sockets.c:    /* maybe lwip_setsockopt_internal has changed err */
+lwip/src/api/sockets.c:static void lwip_setsockopt_internal(void *arg)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    struct lwip_setgetsockopt_data *data;
+lwip/src/api/sockets.c:    data = (struct lwip_setgetsockopt_data *) arg;
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, SOL_SOCKET, optname=0x%x, ..) -> %s\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_IP, IP_TTL, ..) -> %d\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_IP, IP_TOS, ..)-> %d\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, TCP_NODELAY) -> %s\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, TCP_KEEPALIVE) -> %"
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, TCP_KEEPIDLE) -> %"
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, TCP_KEEPINTVL) -> %"
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_TCP, TCP_KEEPCNT) -> %"
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_UDPLITE, UDPLITE_SEND_CSCOV) -> %d\n",
+lwip/src/api/sockets.c:                                ("lwip_setsockopt(%d, IPPROTO_UDPLITE, UDPLITE_RECV_CSCOV) -> %d\n",
+lwip/src/api/sockets.c:int lwip_ioctl(int s, long cmd, void *argp)
+lwip/src/api/sockets.c:    struct lwip_socket *sock = get_socket(s);
+lwip/src/api/sockets.c:                        ("lwip_ioctl(%d, FIONREAD, %p) = %" U16_F "\n", s, argp,
+lwip/src/api/sockets.c:                        ("lwip_ioctl(%d, FIONBIO, %d)\n", s,
+lwip/src/api/sockets.c:                        ("lwip_ioctl(%d, UNIMPL: 0x%lx, %p)\n", s, cmd, argp));
+lwip/src/api/sockets.c:int lwip_serialise_sock(int s, struct lwip_sockinfo *si)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:                        ("lwip_redirect(%d) failed, err=%d\n", s, err));
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_redirect(%d) succeeded\n", s));
+lwip/src/api/sockets.c:static int lwip_redirect(int s, struct lwip_sockinfo *si)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_redirect(%d, ", s));
+lwip/src/api/sockets.c:                    ("lwip_redirect(%d) failed, err=%d\n", s, err));
+lwip/src/api/sockets.c:    LWIP_DEBUGF(SOCKETS_DEBUG, ("lwip_redirect(%d) succeeded\n", s));
+lwip/src/api/sockets.c:int lwip_deserialise_sock(int s, struct lwip_sockinfo *si)
+lwip/src/api/sockets.c:    struct lwip_socket *sock;
+lwip/src/api/sockets.c:        printf("lwip_deserialise_sock: in ESTABLISHED state!!!\n");
+lwip/src/api/sockets.c:        /* start lwip redirect now */
+lwip/src/api/sockets.c:        int ret = lwip_redirect(s, si);
+lwip/src/api/sockets.c:        printf("lwip_deserialise_sock: in LISTEN state!!!\n");
+lwip/src/api/sockets.c:        printf("lwip_deserialise_sock: in %d state!!!\n",
+lwip/src/api/sockets.c:bool lwip_sock_ready_read(int socket)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:bool lwip_sock_ready_write(int socket)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:bool lwip_sock_is_open(int s)
+lwip/src/api/sockets.c:errval_t lwip_sock_waitset_deregister_read(int socket)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:errval_t lwip_sock_waitset_register_read(int socket, struct waitset *ws)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:    if (lwip_sock_ready_read(socket)) {
+lwip/src/api/sockets.c:errval_t lwip_sock_waitset_deregister_write(int socket)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:errval_t lwip_sock_waitset_register_write(int socket, struct waitset *ws)
+lwip/src/api/sockets.c:    struct lwip_socket *p_sock;
+lwip/src/api/sockets.c:    if (lwip_sock_ready_write(socket)) {
+lwip/src/api/api_msg.c:#include "lwip/opt.h"
+lwip/src/api/api_msg.c:#if LWIP_NETCONN                /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/api_msg.c:#include "lwip/api_msg.h"
+lwip/src/api/api_msg.c:#include "lwip/ip.h"
+lwip/src/api/api_msg.c:#include "lwip/udp.h"
+lwip/src/api/api_msg.c:#include "lwip/tcp.h"
+lwip/src/api/api_msg.c:#include "lwip/raw.h"
+lwip/src/api/api_msg.c:#include "lwip/memp.h"
+lwip/src/api/api_msg.c:#include "lwip/tcpip.h"
+lwip/src/api/api_msg.c:#include "lwip/igmp.h"
+lwip/src/api/api_msg.c:#include "lwip/dns.h"
+lwip/src/api/api_msg.c:// antoinek: Might need to reenable this when we enable multi threaded lwip
+lwip/src/api/api_msg.c://extern bool lwip_in_packet_received;
+lwip/src/api/api_msg.c:            /*if (lwip_in_packet_received) {
+lwip/src/api/api_msg.c:                lwip_mutex_lock();
+lwip/src/api/api_msg.c:        /*if (!lwip_in_packet_received) {
+lwip/src/api/api_msg.c:            lwip_mutex_unlock();
+lwip/src/api/err.c:#include "lwip/err.h"
+lwip/src/api/err.c: * Convert an lwip internal error to a string representation.
+lwip/src/api/err.c: * @param err an lwip internal err_t
+lwip/src/api/err.c:const char *lwip_strerr(err_t err)
+lwip/src/api/netifapi.c:#include "lwip/opt.h"
+lwip/src/api/netifapi.c:#if LWIP_NETIF_API              /* don't build if not configured for use in lwipopts.h */
+lwip/src/api/netifapi.c:#include "lwip/netifapi.h"
+lwip/src/api/netifapi.c:#include "lwip/tcpip.h"
+lwip/src/api/netdb.c:#include "lwip/netdb.h"
+lwip/src/api/netdb.c:#include "lwip/err.h"
+lwip/src/api/netdb.c:#include "lwip/mem.h"
+lwip/src/api/netdb.c:#include "lwip/ip_addr.h"
+lwip/src/api/netdb.c:#include "lwip/api.h"
+lwip/src/api/netdb.c: * set of variables for lwip_gethostbyname, 1 if we use a local storage */
+lwip/src/api/netdb.c:struct hostent *lwip_gethostbyname(const char *name)
+lwip/src/api/netdb.c:    /* buffer variables for lwip_gethostbyname() */
+lwip/src/api/netdb.c:                    ("lwip_gethostbyname(%s) failed, err=%d\n", name, err));
+lwip/src/api/netdb.c: * Thread-safe variant of lwip_gethostbyname: instead of using a static
+lwip/src/api/netdb.c:lwip_gethostbyname_r(const char *name, struct hostent *ret, char *buf,
+lwip/src/api/netdb.c:                    ("lwip_gethostbyname(%s) failed, err=%d\n", name, err));
+lwip/src/api/netdb.c:void lwip_freeaddrinfo(struct addrinfo *ai)
+lwip/src/api/netdb.c: * lwip_freeaddrinfo()!
+lwip/src/api/netdb.c:lwip_getaddrinfo(const char *nodename, const char *servname,
+lwip/src/netif/slipif.c:#include "lwip/opt.h"
+lwip/src/netif/slipif.c:#include "lwip/def.h"
+lwip/src/netif/slipif.c:#include "lwip/pbuf.h"
+lwip/src/netif/slipif.c:#include "lwip/sys.h"
+lwip/src/netif/slipif.c:#include "lwip/stats.h"
+lwip/src/netif/slipif.c:#include "lwip/snmp.h"
+lwip/src/netif/slipif.c:#include "lwip/sio.h"
+lwip/src/netif/slipif.c: * @param netif the lwip network interface structure for this slipif
+lwip/src/netif/slipif.c: * @param netif the lwip network interface structure for this slipif
+lwip/src/netif/slipif.c: * @param nf the lwip network interface structure for this slipif
+lwip/src/netif/slipif.c: * @param netif the lwip network interface structure for this slipif
+lwip/src/netif/bfeth.c:#include "lwip/opt.h"
+lwip/src/netif/bfeth.c:#include "lwip/def.h"
+lwip/src/netif/bfeth.c:#include "lwip/init.h"
+lwip/src/netif/bfeth.c:#include "lwip/mem.h"
+lwip/src/netif/bfeth.c:#include "lwip/pbuf.h"
+lwip/src/netif/bfeth.c:#include "lwip/sys.h"
+lwip/src/netif/bfeth.c:#include <lwip/stats.h>
+lwip/src/netif/bfeth.c:#include <lwip/snmp.h>
+lwip/src/netif/bfeth.c: * @param netif the already initialized lwip network interface structure
+lwip/src/netif/bfeth.c: * @param netif the lwip network interface structure for this bfeth
+lwip/src/netif/bfeth.c:    //avoid that lwip frees this buffer before it has been sent by the network card.
+lwip/src/netif/bfeth.c: * @param netif the lwip network interface structure for this bfeth
+lwip/src/netif/bfeth.c:    perform_lwip_work();
+lwip/src/netif/bfeth.c: * @param netif the lwip network interface structure for this bfeth
+lwip/src/netif/bfeth.c:    netif->hostname = "lwip";
+lwip/src/netif/loopif.c:#include "lwip/opt.h"
+lwip/src/netif/loopif.c:#include "lwip/snmp.h"
+lwip/src/netif/loopif.c: * Initialize a lwip network interface structure for a loopback interface
+lwip/src/netif/loopif.c: * @param netif the lwip network interface structure for this loopif
+lwip/src/netif/ethernetif.c:#include "lwip/opt.h"
+lwip/src/netif/ethernetif.c:#include "lwip/def.h"
+lwip/src/netif/ethernetif.c:#include "lwip/mem.h"
+lwip/src/netif/ethernetif.c:#include "lwip/pbuf.h"
+lwip/src/netif/ethernetif.c:#include "lwip/sys.h"
+lwip/src/netif/ethernetif.c:#include <lwip/stats.h>
+lwip/src/netif/ethernetif.c:#include <lwip/snmp.h>
+lwip/src/netif/ethernetif.c: * @param netif the already initialized lwip network interface structure
+lwip/src/netif/ethernetif.c: * @param netif the lwip network interface structure for this ethernetif
+lwip/src/netif/ethernetif.c: * @param netif the lwip network interface structure for this ethernetif
+lwip/src/netif/ethernetif.c: * @param netif the lwip network interface structure for this ethernetif
+lwip/src/netif/ethernetif.c: * @param netif the lwip network interface structure for this ethernetif
+lwip/src/netif/ethernetif.c:    netif->hostname = "lwip";
+lwip/src/netif/etharp.c:#include "lwip/opt.h"
+lwip/src/netif/etharp.c:#if LWIP_ARP  // don't build if not configured for use in lwipopts.h
+lwip/src/netif/etharp.c:#include "lwip/inet.h"
+lwip/src/netif/etharp.c:#include "lwip/ip.h"
+lwip/src/netif/etharp.c:#include "lwip/stats.h"
+lwip/src/netif/etharp.c:#include "lwip/snmp.h"
+lwip/src/netif/etharp.c:#include "lwip/dhcp.h"
+lwip/src/netif/etharp.c:#include "lwip/autoip.h"
+lwip/src/netif/etharp.c:#include "lwip/init.h"
+lwip/src/netif/etharp.c:#error "If you want to use ARP, ARP_TABLE_SIZE must fit in an s8_t, so, you have to reduce it in your lwipopts.h"
+lwip/src/netif/etharp.c: * @param netif the lwip network interface on which to send the ARP packet
+lwip/src/netif/etharp.c: * @param netif the lwip network interface on which to send the request
+lwip/src/netif/etharp.c: * @param netif the lwip network interface on which to send the request
+lwip/src/core/memp.c:#include "lwip/opt.h"
+lwip/src/core/memp.c:#include "lwip/def.h"
+lwip/src/core/memp.c:#include "lwip/memp.h"
+lwip/src/core/memp.c:#include "lwip/pbuf.h"
+lwip/src/core/memp.c:#include "lwip/udp.h"
+lwip/src/core/memp.c:#include "lwip/raw.h"
+lwip/src/core/memp.c:#include "lwip/tcp.h"
+lwip/src/core/memp.c:#include "lwip/igmp.h"
+lwip/src/core/memp.c:#include "lwip/api.h"
+lwip/src/core/memp.c:#include "lwip/api_msg.h"
+lwip/src/core/memp.c:#include "lwip/tcpip.h"
+lwip/src/core/memp.c:#include "lwip/sys.h"
+lwip/src/core/memp.c:#include "lwip/stats.h"
+lwip/src/core/memp.c:#include "lwip/ip_frag.h"
+lwip/src/core/memp.c:#if !MEMP_MEM_MALLOC            /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/memp.c: * lwipopts.h to change the amount reserved for checking. */
+lwip/src/core/memp.c:#include "lwip/memp_std.h"
+lwip/src/core/memp.c:#if !MEMP_MEM_MALLOC            /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/memp.c:#include "lwip/memp_std.h"
+lwip/src/core/memp.c:#include "lwip/memp_std.h"
+lwip/src/core/memp.c:#include "lwip/memp_std.h"
+lwip/src/core/memp.c:#include "lwip/memp_std.h"
+lwip/src/core/dhcp.c: * In lwip/dhcp.h
+lwip/src/core/dhcp.c:#include "lwip/opt.h"
+lwip/src/core/dhcp.c:#if LWIP_DHCP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/dhcp.c:#include "lwip/stats.h"
+lwip/src/core/dhcp.c:#include "lwip/mem.h"
+lwip/src/core/dhcp.c:#include "lwip/udp.h"
+lwip/src/core/dhcp.c:#include "lwip/ip_addr.h"
+lwip/src/core/dhcp.c:#include "lwip/netif.h"
+lwip/src/core/dhcp.c:#include "lwip/inet.h"
+lwip/src/core/dhcp.c:#include "lwip/sys.h"
+lwip/src/core/dhcp.c:#include "lwip/dhcp.h"
+lwip/src/core/dhcp.c:#include "lwip/autoip.h"
+lwip/src/core/dhcp.c:#include "lwip/dns.h"
+lwip/src/core/dns.c:#include "lwip/opt.h"
+lwip/src/core/dns.c:#if LWIP_DNS                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/dns.c:#include "lwip/udp.h"
+lwip/src/core/dns.c:#include "lwip/mem.h"
+lwip/src/core/dns.c:#include "lwip/dns.h"
+lwip/src/core/ipv6/ip6_addr.c:#include "lwip/opt.h"
+lwip/src/core/ipv6/ip6_addr.c:#include "lwip/ip_addr.h"
+lwip/src/core/ipv6/ip6_addr.c:#include "lwip/inet.h"
+lwip/src/core/ipv6/icmp6.c:#include "lwip/opt.h"
+lwip/src/core/ipv6/icmp6.c:#if LWIP_ICMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/ipv6/icmp6.c:#include "lwip/icmp.h"
+lwip/src/core/ipv6/icmp6.c:#include "lwip/inet.h"
+lwip/src/core/ipv6/icmp6.c:#include "lwip/ip.h"
+lwip/src/core/ipv6/icmp6.c:#include "lwip/def.h"
+lwip/src/core/ipv6/icmp6.c:#include "lwip/stats.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/opt.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/def.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/mem.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/ip.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/inet.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/netif.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/icmp.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/udp.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/tcp.h"
+lwip/src/core/ipv6/ip6.c:#include "lwip/stats.h"
+lwip/src/core/ipv6/inet6.c:#include "lwip/opt.h"
+lwip/src/core/ipv6/inet6.c:#include "lwip/def.h"
+lwip/src/core/ipv6/inet6.c:#include "lwip/inet.h"
+lwip/src/core/tcp_in.c:#include "lwip/opt.h"
+lwip/src/core/tcp_in.c:#if LWIP_TCP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/tcp_in.c:#include "lwip/tcp.h"
+lwip/src/core/tcp_in.c:#include "lwip/def.h"
+lwip/src/core/tcp_in.c:#include "lwip/ip_addr.h"
+lwip/src/core/tcp_in.c:#include "lwip/netif.h"
+lwip/src/core/tcp_in.c:#include "lwip/mem.h"
+lwip/src/core/tcp_in.c:#include "lwip/memp.h"
+lwip/src/core/tcp_in.c:#include "lwip/inet.h"
+lwip/src/core/tcp_in.c:#include "lwip/inet_chksum.h"
+lwip/src/core/tcp_in.c:#include "lwip/stats.h"
+lwip/src/core/tcp_in.c:#include "lwip/snmp.h"
+lwip/src/core/tcp.c:#include "lwip/opt.h"
+lwip/src/core/tcp.c:#if LWIP_TCP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/tcp.c:#include "lwip/def.h"
+lwip/src/core/tcp.c:#include "lwip/mem.h"
+lwip/src/core/tcp.c:#include "lwip/memp.h"
+lwip/src/core/tcp.c:#include "lwip/snmp.h"
+lwip/src/core/tcp.c:#include "lwip/tcp.h"
+lwip/src/core/tcp.c:#include "lwip/debug.h"
+lwip/src/core/udp.c:#include "lwip/opt.h"
+lwip/src/core/udp.c:#if LWIP_UDP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/udp.c:#include "lwip/udp.h"
+lwip/src/core/udp.c:#include "lwip/def.h"
+lwip/src/core/udp.c:#include "lwip/memp.h"
+lwip/src/core/udp.c:#include "lwip/inet.h"
+lwip/src/core/udp.c:#include "lwip/inet_chksum.h"
+lwip/src/core/udp.c:#include "lwip/ip_addr.h"
+lwip/src/core/udp.c:#include "lwip/netif.h"
+lwip/src/core/udp.c:#include "lwip/icmp.h"
+lwip/src/core/udp.c:#include "lwip/stats.h"
+lwip/src/core/udp.c:#include "lwip/snmp.h"
+lwip/src/core/udp.c:#include "lwip/dhcp.h"
+lwip/src/core/udp.c:#include "lwip/init.h"
+lwip/src/core/sys.c:#include "lwip/opt.h"
+lwip/src/core/sys.c:#if (NO_SYS == 0)               /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/sys.c:#include "lwip/sys.h"
+lwip/src/core/sys.c:#include "lwip/def.h"
+lwip/src/core/sys.c:#include "lwip/memp.h"
+lwip/src/core/sys.c:#include "lwip/tcpip.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/ip_frag.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/ip.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/inet_chksum.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/netif.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/snmp.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/stats.h"
+lwip/src/core/ipv4/ip_frag.c:#include "lwip/icmp.h"
+lwip/src/core/ipv4/inet.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/inet.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/ip.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/def.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/mem.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/ip_frag.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/inet_chksum.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/netif.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/icmp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/igmp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/raw.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/udp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/tcp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/snmp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/dhcp.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/stats.h"
+lwip/src/core/ipv4/ip.c:#include "lwip/init.h"
+lwip/src/core/ipv4/inet_chksum.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/inet_chksum.c:#include "lwip/inet_chksum.h"
+lwip/src/core/ipv4/inet_chksum.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/inet_chksum.c:#define LWIP_CHKSUM lwip_standard_chksum
+lwip/src/core/ipv4/inet_chksum.c: * lwip checksum
+lwip/src/core/ipv4/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+lwip/src/core/ipv4/inet_chksum.c:static u16_t lwip_standard_chksum(void *dataptr, u16_t len)
+lwip/src/core/ipv4/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+lwip/src/core/ipv4/inet_chksum.c:static u16_t lwip_standard_chksum(void *dataptr, int len)
+lwip/src/core/ipv4/inet_chksum.c: * @return host order (!) lwip checksum (non-inverted Internet sum) 
+lwip/src/core/ipv4/inet_chksum.c:static u16_t lwip_standard_chksum(void *dataptr, int len)
+lwip/src/core/ipv4/inet_chksum.c:        /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): unwrapped lwip_chksum()=%"X32_F" \n", acc)); */
+lwip/src/core/ipv4/inet_chksum.c:        /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): wrapped lwip_chksum()=%"X32_F" \n", acc)); */
+lwip/src/core/ipv4/inet_chksum.c:                ("inet_chksum_pseudo(): pbuf chain lwip_chksum()=%" X32_F "\n",
+lwip/src/core/ipv4/inet_chksum.c:        /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): unwrapped lwip_chksum()=%"X32_F" \n", acc)); */
+lwip/src/core/ipv4/inet_chksum.c:        /*LWIP_DEBUGF(INET_DEBUG, ("inet_chksum_pseudo(): wrapped lwip_chksum()=%"X32_F" \n", acc)); */
+lwip/src/core/ipv4/inet_chksum.c:                ("inet_chksum_pseudo(): pbuf chain lwip_chksum()=%" X32_F "\n",
+lwip/src/core/ipv4/autoip.c: * define LWIP_AUTOIP 1  in your lwipopts.h
+lwip/src/core/ipv4/autoip.c: * - define LWIP_DHCP_AUTOIP_COOP 1 in your lwipopts.h.
+lwip/src/core/ipv4/autoip.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/autoip.c:#if LWIP_AUTOIP                 /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/ipv4/autoip.c:#include "lwip/mem.h"
+lwip/src/core/ipv4/autoip.c:#include "lwip/udp.h"
+lwip/src/core/ipv4/autoip.c:#include "lwip/ip_addr.h"
+lwip/src/core/ipv4/autoip.c:#include "lwip/netif.h"
+lwip/src/core/ipv4/autoip.c:#include "lwip/autoip.h"
+lwip/src/core/ipv4/autoip.c: * You could use "rand()" from the C Library if you define LWIP_AUTOIP_RAND in lwipopts.h */
+lwip/src/core/ipv4/autoip.c: * If you want to override this, define it to something else in lwipopts.h.
+lwip/src/core/ipv4/ip_addr.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/ip_addr.c:#include "lwip/ip_addr.h"
+lwip/src/core/ipv4/ip_addr.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/ip_addr.c:#include "lwip/netif.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/icmp.c:#if LWIP_ICMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/ipv4/icmp.c:#include "lwip/icmp.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/inet_chksum.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/ip.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/def.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/stats.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/snmp.h"
+lwip/src/core/ipv4/icmp.c:#include "lwip/init.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/opt.h"
+lwip/src/core/ipv4/igmp.c:#if LWIP_IGMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/ipv4/igmp.c:#include "lwip/igmp.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/debug.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/def.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/mem.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/ip.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/inet.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/inet_chksum.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/netif.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/icmp.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/udp.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/tcp.h"
+lwip/src/core/ipv4/igmp.c:#include "lwip/stats.h"
+lwip/src/core/tcp_out.c:#include "lwip/opt.h"
+lwip/src/core/tcp_out.c:#if LWIP_TCP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/tcp_out.c:#include "lwip/tcp.h"
+lwip/src/core/tcp_out.c:#include "lwip/def.h"
+lwip/src/core/tcp_out.c:#include "lwip/mem.h"
+lwip/src/core/tcp_out.c:#include "lwip/memp.h"
+lwip/src/core/tcp_out.c:#include "lwip/sys.h"
+lwip/src/core/tcp_out.c:#include "lwip/ip_addr.h"
+lwip/src/core/tcp_out.c:#include "lwip/netif.h"
+lwip/src/core/tcp_out.c:#include "lwip/inet.h"
+lwip/src/core/tcp_out.c:#include "lwip/inet_chksum.h"
+lwip/src/core/tcp_out.c:#include "lwip/stats.h"
+lwip/src/core/tcp_out.c:#include "lwip/snmp.h"
+lwip/src/core/tcp_out.c:#include "lwip/init.h"
+lwip/src/core/raw.c:#include "lwip/opt.h"
+lwip/src/core/raw.c:#if LWIP_RAW                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/raw.c:#include "lwip/def.h"
+lwip/src/core/raw.c:#include "lwip/memp.h"
+lwip/src/core/raw.c:#include "lwip/inet.h"
+lwip/src/core/raw.c:#include "lwip/ip_addr.h"
+lwip/src/core/raw.c:#include "lwip/netif.h"
+lwip/src/core/raw.c:#include "lwip/raw.h"
+lwip/src/core/raw.c:#include "lwip/stats.h"
+lwip/src/core/raw.c:#include "lwip/snmp.h"
+lwip/src/core/raw.c: * of lwip. Using the raw api you could use raw_sendto() instead
+lwip/src/core/snmp/msg_out.c:#include "lwip/opt.h"
+lwip/src/core/snmp/msg_out.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/msg_out.c:#include "lwip/udp.h"
+lwip/src/core/snmp/msg_out.c:#include "lwip/netif.h"
+lwip/src/core/snmp/msg_out.c:#include "lwip/snmp.h"
+lwip/src/core/snmp/msg_out.c:#include "lwip/snmp_asn1.h"
+lwip/src/core/snmp/msg_out.c:#include "lwip/snmp_msg.h"
+lwip/src/core/snmp/mib_structs.c:#include "lwip/opt.h"
+lwip/src/core/snmp/mib_structs.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/mib_structs.c:#include "lwip/snmp_structs.h"
+lwip/src/core/snmp/mib_structs.c:#include "lwip/mem.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/opt.h"
+lwip/src/core/snmp/msg_in.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/msg_in.c:#include "lwip/ip_addr.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/mem.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/udp.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/stats.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/snmp.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/snmp_asn1.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/snmp_msg.h"
+lwip/src/core/snmp/msg_in.c:#include "lwip/snmp_structs.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/opt.h"
+lwip/src/core/snmp/mib2.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/mib2.c:#include "lwip/snmp.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/netif.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/ip.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/ip_frag.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/tcp.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/udp.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/snmp_asn1.h"
+lwip/src/core/snmp/mib2.c:#include "lwip/snmp_structs.h"
+lwip/src/core/snmp/mib2.c:/* prototypes of the following functions are in lwip/src/include/lwip/snmp.h */
+lwip/src/core/snmp/asn1_enc.c:#include "lwip/opt.h"
+lwip/src/core/snmp/asn1_enc.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/asn1_enc.c:#include "lwip/snmp_asn1.h"
+lwip/src/core/snmp/asn1_dec.c:#include "lwip/opt.h"
+lwip/src/core/snmp/asn1_dec.c:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/snmp/asn1_dec.c:#include "lwip/snmp_asn1.h"
+lwip/src/core/pbuf.c:#include "lwip/opt.h"
+lwip/src/core/pbuf.c:#include "lwip/stats.h"
+lwip/src/core/pbuf.c:#include "lwip/def.h"
+lwip/src/core/pbuf.c:#include "lwip/mem.h"
+lwip/src/core/pbuf.c:#include "lwip/memp.h"
+lwip/src/core/pbuf.c:#include "lwip/pbuf.h"
+lwip/src/core/pbuf.c:#include "lwip/sys.h"
+lwip/src/core/pbuf.c:#include "lwip/tcp.h"
+lwip/src/core/init.c:#include "lwip/opt.h"
+lwip/src/core/init.c:#include "lwip/init.h"
+lwip/src/core/init.c:#include "lwip/stats.h"
+lwip/src/core/init.c:#include "lwip/sys.h"
+lwip/src/core/init.c:#include "lwip/mem.h"
+lwip/src/core/init.c:#include "lwip/memp.h"
+lwip/src/core/init.c:#include "lwip/pbuf.h"
+lwip/src/core/init.c:#include "lwip/netif.h"
+lwip/src/core/init.c:#include "lwip/sockets.h"
+lwip/src/core/init.c:#include "lwip/ip.h"
+lwip/src/core/init.c:#include "lwip/raw.h"
+lwip/src/core/init.c:#include "lwip/udp.h"
+lwip/src/core/init.c:#include "lwip/tcp.h"
+lwip/src/core/init.c:#include "lwip/snmp_msg.h"
+lwip/src/core/init.c:#include "lwip/autoip.h"
+lwip/src/core/init.c:#include "lwip/igmp.h"
+lwip/src/core/init.c:#include "lwip/dns.h"
+lwip/src/core/init.c:#error "If you want to use broadcast filter per pcb on recv operations, you have to define IP_SOF_BROADCAST=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use ARP Queueing, you have to define LWIP_ARP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use UDP Lite, you have to define LWIP_UDP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use SNMP, you have to define LWIP_UDP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use DHCP, you have to define LWIP_UDP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use IGMP, you have to define LWIP_UDP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use DNS, you have to define LWIP_UDP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use ARP, ARP_TABLE_SIZE must fit in an s8_t, so, you have to reduce it in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use ARP Queueing, you have to define MEMP_NUM_ARP_QUEUE>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use RAW, you have to define MEMP_NUM_RAW_PCB>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use UDP, you have to define MEMP_NUM_UDP_PCB>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use TCP, you have to define MEMP_NUM_TCP_PCB>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use TCP, TCP_WND must fit in an u16_t, so, you have to reduce it in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use TCP, TCP_SND_QUEUELEN must fit in an u16_t, so, you have to reduce it in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use TCP, TCP_MAXRTX and TCP_SYNMAXRTX must less or equal to 12 (due to tcp_backoff table), so, you have to reduce them in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use IGMP, you have to define MEMP_NUM_IGMP_GROUP>1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use PPP, you have to define NO_SYS=0 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use NETIF API, you have to define NO_SYS=0 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use Sequential API, you have to define NO_SYS=0 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use Sequential API, you have to define MEMP_NUM_TCPIP_MSG_API>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use Socket API, you have to define LWIP_NETCONN=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use DHCP/AUTOIP cooperation mode, you have to define LWIP_DHCP=1 and LWIP_AUTOIP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use DHCP ARP checking, you have to define LWIP_DHCP=1 and LWIP_ARP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use AUTOIP, you have to define LWIP_ARP=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use SNMP, you have to define SNMP_CONCURRENT_REQUESTS>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "If you want to use SNMP, you have to define SNMP_TRAP_DESTINATIONS>=1 in your lwipopts.h"
+lwip/src/core/init.c:#error "One and exactly one of LWIP_EVENT_API and LWIP_CALLBACK_API has to be enabled in your lwipopts.h"
+lwip/src/core/init.c:#error "MEM_LIBC_MALLOC and MEM_USE_POOLS may not both be simultaneously enabled in your lwipopts.h"
+lwip/src/core/init.c:#error "MEM_USE_POOLS requires custom pools (MEMP_USE_CUSTOM_POOLS) to be enabled in your lwipopts.h"
+lwip/src/core/init.c:#error "MEMP_NUM_TCPIP_MSG option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:#error "MEMP_NUM_API_MSG option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:#error "TCP_REXMIT_DEBUG option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:#error "RAW_STATS option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:#error "ETHARP_QUEUE_FIRST option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:#error "ETHARP_ALWAYS_INSERT option is deprecated. Remove it from your lwipopts.h."
+lwip/src/core/init.c:static void lwip_sanity_check(void)
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: MEMP_NUM_NETCONN should be less than the sum of MEMP_NUM_{TCP,RAW,UDP}_PCB+MEMP_NUM_TCP_PCB_LISTEN\n"));
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: MEMP_NUM_TCP_SEG should be at least as big as TCP_SND_QUEUELEN\n"));
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: TCP_SND_QUEUELEN must be at least as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work\n"));
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: TCP_SNDLOWAT must be less than or equal to TCP_SND_BUF.\n"));
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: TCP_WND is larger than space provided by PBUF_POOL_SIZE*PBUF_POOL_BUFSIZE\n"));
+lwip/src/core/init.c:        LWIP_PLATFORM_DIAG(("lwip_sanity_check: WARNING: TCP_WND is smaller than MSS\n"));
+lwip/src/core/init.c:#define lwip_sanity_check()
+lwip/src/core/init.c:static void remaining_lwip_initialization(char *card_name, uint64_t queueid)
+lwip/src/core/init.c:    DEBUGPRINTPS("remaining_lwip_init: allocating pbuf memory\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("remaining_lwip_init: allocating memory for sending\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("remaining_lwip_init: done with memroy allocation\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP: lwip_starting\n");
+lwip/src/core/init.c:    lwip_socket_init();
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done ip_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done udp_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done tcp_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done snmp_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done autoip_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done igmp_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done2 igmp_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: starting DNS_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("r_lwip_init: done DNS_init\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP: lwip_started\n");
+lwip/src/core/init.c:extern struct waitset *lwip_waitset;    // idc_barrelfish.c
+lwip/src/core/init.c:extern struct thread_mutex *lwip_mutex; // idc_barrelfish.c
+lwip/src/core/init.c:struct netif *owner_lwip_init(char *card_name, uint64_t queueid)
+lwip/src/core/init.c:    DEBUGPRINTPS("owner_lwip_init: Inside lwip_init\n");
+lwip/src/core/init.c:    lwip_init(card_name, queueid);
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP: owner_lwip_init: done with connection setup\n");
+lwip/src/core/init.c:    lwip_mutex_lock();
+lwip/src/core/init.c:    lwip_mutex_unlock();
+lwip/src/core/init.c:bool lwip_init_ex(const char *card_name, uint64_t queueid,
+lwip/src/core/init.c:    printf("lwip_init_ex: starting......................\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP_other: Inside lwip_init\n");
+lwip/src/core/init.c:        lwip_waitset = get_default_waitset();
+lwip/src/core/init.c://        lwip_waitset = get_default_waitset();
+lwip/src/core/init.c:        lwip_waitset = opt_waitset;
+lwip/src/core/init.c:        lwip_mutex = opt_mutex;
+lwip/src/core/init.c:    lwip_sanity_check();
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP: lwip_init: done with sanity check\n");
+lwip/src/core/init.c:    DEBUGPRINTPS("LWIP: lwip_init: done with connection setup\n");
+lwip/src/core/init.c:    remaining_lwip_initialization((char *) card_name, queueid);
+lwip/src/core/init.c:    errval_t err = periodic_event_create(&tcp_timer, lwip_waitset,
+lwip/src/core/init.c:    extern bool lwip_init_done;
+lwip/src/core/init.c:    lwip_init_done = true;
+lwip/src/core/init.c:    printf("lwip_init_ex: done......................\n");
+lwip/src/core/init.c:bool lwip_init_auto_ex(struct waitset * opt_waitset,
+lwip/src/core/init.c:    return lwip_init_ex(card_name, default_queueid, opt_waitset, opt_mutex);
+lwip/src/core/init.c:}                               // end function: lwip_init_auto_ex
+lwip/src/core/init.c:bool lwip_init_auto(void)
+lwip/src/core/init.c:    return lwip_init_auto_ex(NULL, NULL);
+lwip/src/core/init.c:bool lwip_init(const char *card_name, uint64_t queueid)
+lwip/src/core/init.c:        return lwip_init_auto_ex(NULL, NULL);
+lwip/src/core/init.c:        return lwip_init_ex(card_name, queueid, NULL, NULL);
+lwip/src/core/init.c:void lwip_debug_show_spp_status(int connection)
+lwip/src/core/init.c:uint64_t wrapper_perform_lwip_work(void)
+lwip/src/core/init.c:    return perform_lwip_work();
+lwip/src/core/init.c:void lwip_benchmark_control(int direction, uint8_t state, uint64_t trigger,
+lwip/src/core/init.c://  printf("calling lwip_benchmark_control\n");
+lwip/src/core/init.c:}  // end function: lwip_benchmark_control
+lwip/src/core/init.c:uint8_t lwip_driver_benchmark_state(int direction, uint64_t *delta,
+lwip/src/core/init.c:int is_lwip_loaded(void)
+lwip/src/core/init.c:    int slots = lwip_check_sp_capacity(TRANSMIT_CONNECTION);
+lwip/src/core/init.c:    slots = lwip_check_sp_capacity(RECEIVE_CONNECTION);
+lwip/src/core/init.c:}                               // end function: is_lwip_loaded?
+lwip/src/core/init.c:uint64_t lwip_packet_drop_count(void)
+lwip/src/core/init.c:}                               // end function: lwip_packet_drop_count
+lwip/src/core/init.c:void lwip_record_event_simple(uint8_t event_type, uint64_t ts)
+lwip/src/core/init.c:} // end function: lwip_record_event_simple
+lwip/src/core/init.c:void lwip_print_interesting_stats(void)
+lwip/src/core/stats.c:#include "lwip/opt.h"
+lwip/src/core/stats.c:#if LWIP_STATS                  /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/stats.c:#include "lwip/def.h"
+lwip/src/core/stats.c:#include "lwip/stats.h"
+lwip/src/core/stats.c:#include "lwip/mem.h"
+lwip/src/core/stats.c:struct stats_ lwip_stats;
+lwip/src/core/stats.c:#include "lwip/memp_std.h"
+lwip/src/core/mem.c: * MEM_LIBC_MALLOC to 1 in your lwipopts.h
+lwip/src/core/mem.c: * MEM_USE_CUSTOM_POOLS to 1 and create a file "lwippools.h" that includes a list
+lwip/src/core/mem.c:#include "lwip/opt.h"
+lwip/src/core/mem.c:#if !MEM_LIBC_MALLOC            /* don't build if not configured for use in lwipopts.h */
+lwip/src/core/mem.c:#include "lwip/def.h"
+lwip/src/core/mem.c:#include "lwip/mem.h"
+lwip/src/core/mem.c:#include "lwip/sys.h"
+lwip/src/core/mem.c:#include "lwip/stats.h"
+lwip/src/core/netif.c:#include "lwip/opt.h"
+lwip/src/core/netif.c:#include "lwip/def.h"
+lwip/src/core/netif.c:#include "lwip/ip_addr.h"
+lwip/src/core/netif.c:#include "lwip/netif.h"
+lwip/src/core/netif.c:#include "lwip/tcp.h"
+lwip/src/core/netif.c:#include "lwip/snmp.h"
+lwip/src/core/netif.c:#include "lwip/igmp.h"
+lwip/src/core/netif.c:#include "lwip/sys.h"
+lwip/src/core/netif.c:#include "lwip/tcpip.h"
+lwip/src/core/netif.c:    /* See:  http://mail.gnu.org/archive/html/lwip-users/2003-03/msg00118.html */
+lwip/src/core/netif.c: * @param netif the lwip network interface structure
+lwip/src/sys_arch.c:#include <lwip/sys.h>
+lwip/src/sys_arch.c:// from example in http://lwip.wikia.com/wiki/Porting_for_an_OS
+lwip/src/sys_arch.c:struct sys_timeouts lwip_system_timeouts = { .next = NULL }; // Default timeouts list for lwIP
+lwip/src/sys_arch.c:struct thread_wrapper *lwip_system_threads = NULL; // a list of all threads created by lwIP
+lwip/src/sys_arch.c:struct thread_mutex *lwip_mutex;
+lwip/src/sys_arch.c:void lwip_mutex_lock(void)
+lwip/src/sys_arch.c:    if (lwip_mutex != NULL) {
+lwip/src/sys_arch.c:        thread_mutex_lock(lwip_mutex);
+lwip/src/sys_arch.c:void lwip_mutex_unlock(void)
+lwip/src/sys_arch.c:    if (lwip_mutex != NULL) {
+lwip/src/sys_arch.c:    	if(lwip_mutex->locked == 0) {
+lwip/src/sys_arch.c:       	 thread_mutex_unlock(lwip_mutex);
+lwip/src/sys_arch.c:// from example in http://lwip.wikia.com/wiki/Porting_for_an_OS
+lwip/src/sys_arch.c:    struct thread_wrapper *thread = lwip_system_threads;
+lwip/src/sys_arch.c:    return &lwip_system_timeouts;
+lwip/src/sys_arch.c:// from example in http://lwip.wikia.com/wiki/Porting_for_an_OS
+lwip/src/sys_arch.c:    newthread->next = lwip_system_threads;
+lwip/src/sys_arch.c:    lwip_system_threads = newthread;
+lwip/src/sys_arch.c:        lwip_system_threads = newthread->next;
+lwip/src/barrelfish/lwip_barrelfish_debug.h:#define LWIPBF_DEBUG(x...) do { printf("lwipBF:%s.%d:%s:%d: ", \
+lwip/src/barrelfish/idc_barrelfish.h:#include "lwip/pbuf.h"
+lwip/src/barrelfish/idc_barrelfish.h:#include <lwip/ip_addr.h>
+lwip/src/barrelfish/idc_barrelfish.h:int lwip_check_sp_capacity(int direction);
+lwip/src/barrelfish/idc_barrelfish.h:uint64_t perform_lwip_work(void);
+lwip/src/barrelfish/ARP_lookup_client.c:#include "lwip_barrelfish_debug.h"
+lwip/src/barrelfish/ARP_lookup_client.c:extern struct waitset *lwip_waitset;
+lwip/src/barrelfish/ARP_lookup_client.c:        DEBUG_ERR(err, "lwip: could not connect to the net_ARP driver.\n"
+lwip/src/barrelfish/ARP_lookup_client.c:    err = net_ARP_bind(iref, net_ARP_bind_cb, NULL, lwip_waitset,
+lwip/src/barrelfish/ARP_lookup_client.c:        assert(!"owner of lwip should never ask for ip through API\n");
+lwip/src/barrelfish/idc_barrelfish.c:#include "lwip/pbuf.h"
+lwip/src/barrelfish/idc_barrelfish.c:#include "lwip/init.h"
+lwip/src/barrelfish/idc_barrelfish.c:#include "lwip/sys.h"
+lwip/src/barrelfish/idc_barrelfish.c:#include "lwip_barrelfish_debug.h"
+lwip/src/barrelfish/idc_barrelfish.c:struct waitset *lwip_waitset;
+lwip/src/barrelfish/idc_barrelfish.c:bool lwip_init_done = false;
+lwip/src/barrelfish/idc_barrelfish.c:uint64_t lwip_queue_id = 0; // queue_id allocated to this application
+lwip/src/barrelfish/idc_barrelfish.c:static void (*lwip_rec_handler) (void *, uint64_t, uint64_t, uint64_t,
+lwip/src/barrelfish/idc_barrelfish.c:static void *lwip_rec_data;
+lwip/src/barrelfish/idc_barrelfish.c:static void (*lwip_free_handler) (struct pbuf *) = NULL;
+lwip/src/barrelfish/idc_barrelfish.c:uint64_t perform_lwip_work(void)
+lwip/src/barrelfish/idc_barrelfish.c:    perform_lwip_work();
+lwip/src/barrelfish/idc_barrelfish.c:        // need to increment the reference count seperately, since lwip only
+lwip/src/barrelfish/idc_barrelfish.c:int lwip_check_sp_capacity(int direction)
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_rec_handler = f;
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_rec_data = data;
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_free_handler = f;
+lwip/src/barrelfish/idc_barrelfish.c:// antoinek: Might need to reenable this when we enable multi threaded lwip
+lwip/src/barrelfish/idc_barrelfish.c://bool lwip_in_packet_received = false;
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_rec_handler(lwip_rec_data, idx, -1ULL, len, len, p);
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_free_handler(p);
+lwip/src/barrelfish/idc_barrelfish.c:    lwip_queue_id = queueid;
+lwip/src/barrelfish/idc_barrelfish.c:    if (lwip_init_done) {
+lwip/src/barrelfish/mem_barrelfish.c:#include "lwip/init.h"
+lwip/src/barrelfish/mem_barrelfish.c:#include "lwip/def.h"
+lwip/src/barrelfish/mem_barrelfish.c:#include "lwip/pbuf.h"
+lwip/src/barrelfish/mem_barrelfish.c:#include "lwip_barrelfish_debug.h"
+lwip/src/barrelfish/mem_barrelfish.c:// Is used to map from buffer ids (benchmark if) to pbufs (lwip if)
+lwip/src/barrelfish/mem_barrelfish.c: * Used to allocate memory for RX/TX buffers in lwip.
+lwip/src/barrelfish/idc_net_control.c:#include "lwip/init.h"
+lwip/src/barrelfish/idc_net_control.c:#include "lwip/barrelfish.h"
+lwip/src/barrelfish/idc_net_control.c:#include "lwip_barrelfish_debug.h"
+lwip/src/barrelfish/idc_net_control.c: * If we are the owner of lwip stack, then we dont need rpc
+lwip/src/barrelfish/idc_net_control.c:extern struct waitset *lwip_waitset;
+lwip/src/barrelfish/idc_net_control.c:extern uint64_t lwip_queue_id;
+lwip/src/barrelfish/idc_net_control.c:        err = event_dispatch(lwip_waitset);
+lwip/src/barrelfish/idc_net_control.c:errval_t lwip_err_to_errval(err_t e)
+lwip/src/barrelfish/idc_net_control.c:            USER_PANIC("unknown LWIP error in lwip_err_to_errval");
+lwip/src/barrelfish/idc_net_control.c: * \brief Connects the lwip instance with net_ports daemon.
+lwip/src/barrelfish/idc_net_control.c:        DEBUG_ERR(err, "lwip: could not connect to the net_ports driver.\n"
+lwip/src/barrelfish/idc_net_control.c:    err = net_ports_bind(iref, net_ports_bind_cb, NULL, lwip_waitset,
+lwip/src/barrelfish/idc_net_control.c:        assert(!"owner of lwip should never ask for ip through API\n");
+lwip/src/barrelfish/idc_net_control.c:                                  appid_delete, lwip_queue_id,
+lwip/src/barrelfish/idc_net_control.c:                                  appid_delete, lwip_queue_id,
+lwip/src/barrelfish/idc_net_control.c:                                 appid_delete, lwip_queue_id,
+lwip/src/include/lwipopts.h:/// Don't want lwip POSIX socket wrappers
+lwip/src/include/netif/bfeth.h:#include <lwip/netif.h>
+lwip/src/include/netif/e1000.h:#include <lwip/netif.h>
+lwip/src/include/netif/e1000.h:void lwip_arrakis_start(int *argc, char ***argv);
+lwip/src/include/netif/loopif.h:#include "lwip/opt.h"
+lwip/src/include/netif/loopif.h:#include "lwip/netif.h"
+lwip/src/include/netif/loopif.h:#include "lwip/err.h"
+lwip/src/include/netif/etharp.h:#include "lwip/opt.h"
+lwip/src/include/netif/etharp.h:#if LWIP_ARP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/netif/etharp.h:#include "lwip/pbuf.h"
+lwip/src/include/netif/etharp.h:#include "lwip/ip_addr.h"
+lwip/src/include/netif/etharp.h:#include "lwip/netif.h"
+lwip/src/include/netif/etharp.h:#include "lwip/ip.h"
+lwip/src/include/netif/slipif.h:#include "lwip/netif.h"
+lwip/src/include/ipv6/lwip/inet.h:#include "lwip/opt.h"
+lwip/src/include/ipv6/lwip/inet.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv6/lwip/inet.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv6/lwip/icmp.h:#include "lwip/opt.h"
+lwip/src/include/ipv6/lwip/icmp.h:#if LWIP_ICMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/ipv6/lwip/icmp.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv6/lwip/icmp.h:#include "lwip/netif.h"
+lwip/src/include/ipv6/lwip/ip_addr.h:#include "lwip/opt.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/opt.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/def.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/err.h"
+lwip/src/include/ipv6/lwip/ip.h:#include "lwip/netif.h"
+lwip/src/include/ipv4/lwip/inet_chksum.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/inet_chksum.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv4/lwip/inet_chksum.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv4/lwip/igmp.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/igmp.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv4/lwip/igmp.h:#include "lwip/netif.h"
+lwip/src/include/ipv4/lwip/igmp.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv4/lwip/igmp.h:#if LWIP_IGMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/ipv4/lwip/igmp.h: * if we keep them separate we will not affect the lwip original code
+lwip/src/include/ipv4/lwip/inet.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/inet.h:#define htons lwip_htons
+lwip/src/include/ipv4/lwip/inet.h:#define ntohs lwip_ntohs
+lwip/src/include/ipv4/lwip/inet.h:#define htonl lwip_htonl
+lwip/src/include/ipv4/lwip/inet.h:#define ntohl lwip_ntohl
+lwip/src/include/ipv4/lwip/icmp.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/icmp.h:#if LWIP_ICMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/ipv4/lwip/icmp.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv4/lwip/icmp.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv4/lwip/icmp.h:#include "lwip/netif.h"
+lwip/src/include/ipv4/lwip/autoip.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/autoip.h:#if LWIP_AUTOIP                 /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/ipv4/lwip/autoip.h:#include "lwip/netif.h"
+lwip/src/include/ipv4/lwip/autoip.h:#include "lwip/udp.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/err.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/netif.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv4/lwip/ip_frag.h:#include "lwip/ip.h"
+lwip/src/include/ipv4/lwip/ip_addr.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/ip_addr.h:#include "lwip/inet.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/opt.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/def.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/pbuf.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/ip_addr.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/err.h"
+lwip/src/include/ipv4/lwip/ip.h:#include "lwip/netif.h"
+lwip/src/include/lwip/opt.h:#include "lwipopts.h"
+lwip/src/include/lwip/opt.h:#include "lwip/debug.h"
+lwip/src/include/lwip/opt.h: * instead of the lwip internal allocator. Can save code size if you
+lwip/src/include/lwip/opt.h:* MEMP_MEM_MALLOC==1: Use mem_malloc/mem_free instead of the lwip pool allocator.
+lwip/src/include/lwip/opt.h: * MEMP_USE_CUSTOM_POOLS==1: whether to include a user file lwippools.h
+lwip/src/include/lwip/opt.h: * by lwIP. If you set this to 1, you must have lwippools.h in your
+lwip/src/include/lwip/opt.h: *     LWIP_EVENT_API==1: The user defines lwip_tcp_event() to receive all
+lwip/src/include/lwip/opt.h: * LWIP_STATS==1: Enable statistics collection in lwip_stats.
+lwip/src/include/lwip/netdb.h:#include "lwip/opt.h"
+lwip/src/include/lwip/netdb.h:#include "lwip/sockets.h"
+lwip/src/include/lwip/netdb.h:struct hostent *lwip_gethostbyname(const char *name);
+lwip/src/include/lwip/netdb.h:int lwip_gethostbyname_r(const char *name, struct hostent *ret, char *buf,
+lwip/src/include/lwip/netdb.h:void lwip_freeaddrinfo(struct addrinfo *ai);
+lwip/src/include/lwip/netdb.h:int lwip_getaddrinfo(const char *nodename,
+lwip/src/include/lwip/netdb.h:#define gethostbyname(name) lwip_gethostbyname(name)
+lwip/src/include/lwip/netdb.h:       lwip_gethostbyname_r(name, ret, buf, buflen, result, h_errnop)
+lwip/src/include/lwip/netdb.h:#define freeaddrinfo(addrinfo) lwip_freeaddrinfo(a)
+lwip/src/include/lwip/netdb.h:       lwip_getaddrinfo(nodname, servname, hints, res)
+lwip/src/include/lwip/barrelfish.h:#include <lwip/err.h>
+lwip/src/include/lwip/barrelfish.h:errval_t lwip_err_to_errval(err_t e);
+lwip/src/include/lwip/api.h:#include "lwip/opt.h"
+lwip/src/include/lwip/api.h:#if LWIP_NETCONN                /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/api.h:#include "lwip/netbuf.h"
+lwip/src/include/lwip/api.h:#include "lwip/sys.h"
+lwip/src/include/lwip/api.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/api.h:#include "lwip/err.h"
+lwip/src/include/lwip/memp_std.h: * Allow for user-defined pools; this must be explicitly set in lwipopts.h
+lwip/src/include/lwip/memp_std.h: * since the default is to NOT look for lwippools.h
+lwip/src/include/lwip/memp_std.h:#include "lwippools.h"
+lwip/src/include/lwip/debug.h:#include "lwip/arch.h"
+lwip/src/include/lwip/udp.h:#include "lwip/opt.h"
+lwip/src/include/lwip/udp.h:#if LWIP_UDP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/udp.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/udp.h:#include "lwip/netif.h"
+lwip/src/include/lwip/udp.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/udp.h:#include "lwip/ip.h"
+lwip/src/include/lwip/sock_serialise.h:#include "lwip/sockets.h"
+lwip/src/include/lwip/sock_serialise.h:#include "lwip/tcp.h"
+lwip/src/include/lwip/sock_serialise.h:#include "lwip/api.h"
+lwip/src/include/lwip/sock_serialise.h:struct lwip_sockinfo {
+lwip/src/include/lwip/sock_serialise.h:int lwip_serialise_sock(int s, struct lwip_sockinfo *si);
+lwip/src/include/lwip/sock_serialise.h:int lwip_deserialise_sock(int s, struct lwip_sockinfo *si);
+lwip/src/include/lwip/memp.h:#include "lwip/opt.h"
+lwip/src/include/lwip/memp.h:#include "lwip/memp_std.h"
+lwip/src/include/lwip/memp.h:#include "lwip/memp_std.h"
+lwip/src/include/lwip/memp.h:#include "lwip/memp_std.h"
+lwip/src/include/lwip/snmp_structs.h:#include "lwip/opt.h"
+lwip/src/include/lwip/snmp_structs.h:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/snmp_structs.h:#include "lwip/snmp.h"
+lwip/src/include/lwip/api_msg.h:#include "lwip/opt.h"
+lwip/src/include/lwip/api_msg.h:#if LWIP_NETCONN                /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/api_msg.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/api_msg.h:#include "lwip/err.h"
+lwip/src/include/lwip/api_msg.h:#include "lwip/sys.h"
+lwip/src/include/lwip/api_msg.h:#include "lwip/igmp.h"
+lwip/src/include/lwip/api_msg.h:#include "lwip/api.h"
+lwip/src/include/lwip/err.h:#include "lwip/opt.h"
+lwip/src/include/lwip/err.h:#include "lwip/arch.h"
+lwip/src/include/lwip/err.h:    extern const char *lwip_strerr(err_t err);
+lwip/src/include/lwip/err.h:#define lwip_strerr(x) ""
+lwip/src/include/lwip/mem.h:#include "lwip/opt.h"
+lwip/src/include/lwip/stats.h:#include "lwip/opt.h"
+lwip/src/include/lwip/stats.h:#include "lwip/mem.h"
+lwip/src/include/lwip/stats.h:#include "lwip/memp.h"
+lwip/src/include/lwip/stats.h:    extern struct stats_ lwip_stats;
+lwip/src/include/lwip/stats.h:#define STATS_INC(x) ++lwip_stats.x
+lwip/src/include/lwip/stats.h:#define STATS_DEC(x) --lwip_stats.x
+lwip/src/include/lwip/stats.h:#define TCP_STATS_DISPLAY() stats_display_proto(&lwip_stats.tcp, "TCP")
+lwip/src/include/lwip/stats.h:#define UDP_STATS_DISPLAY() stats_display_proto(&lwip_stats.udp, "UDP")
+lwip/src/include/lwip/stats.h:#define ICMP_STATS_DISPLAY() stats_display_proto(&lwip_stats.icmp, "ICMP")
+lwip/src/include/lwip/stats.h:#define IGMP_STATS_DISPLAY() stats_display_igmp(&lwip_stats.igmp)
+lwip/src/include/lwip/stats.h:#define IP_STATS_DISPLAY() stats_display_proto(&lwip_stats.ip, "IP")
+lwip/src/include/lwip/stats.h:#define IPFRAG_STATS_DISPLAY() stats_display_proto(&lwip_stats.ip_frag, "IP_FRAG")
+lwip/src/include/lwip/stats.h:#define ETHARP_STATS_DISPLAY() stats_display_proto(&lwip_stats.etharp, "ETHARP")
+lwip/src/include/lwip/stats.h:#define LINK_STATS_DISPLAY() stats_display_proto(&lwip_stats.link, "LINK")
+lwip/src/include/lwip/stats.h:#define MEM_STATS_AVAIL(x, y) lwip_stats.mem.x = y
+lwip/src/include/lwip/stats.h:#define MEM_STATS_INC_USED(x, y) do { lwip_stats.mem.used += y; \
+lwip/src/include/lwip/stats.h:                                    if (lwip_stats.mem.max < lwip_stats.mem.used) { \
+lwip/src/include/lwip/stats.h:                                        lwip_stats.mem.max = lwip_stats.mem.used; \
+lwip/src/include/lwip/stats.h:#define MEM_STATS_DEC_USED(x, y) lwip_stats.mem.x -= y
+lwip/src/include/lwip/stats.h:#define MEM_STATS_DISPLAY() stats_display_mem(&lwip_stats.mem, "HEAP")
+lwip/src/include/lwip/stats.h:#define MEMP_STATS_AVAIL(x, i, y) lwip_stats.memp[i].x = y
+lwip/src/include/lwip/stats.h:#define MEMP_STATS_INC_USED(x, i) do { ++lwip_stats.memp[i].used; \
+lwip/src/include/lwip/stats.h:                                    if (lwip_stats.memp[i].max < lwip_stats.memp[i].used) { \
+lwip/src/include/lwip/stats.h:                                        lwip_stats.memp[i].max = lwip_stats.memp[i].used; \
+lwip/src/include/lwip/stats.h:#define MEMP_STATS_DISPLAY(i) stats_display_memp(&lwip_stats.memp[i], i)
+lwip/src/include/lwip/stats.h:#define SYS_STATS_DISPLAY() stats_display_sys(&lwip_stats.sys)
+lwip/src/include/lwip/dhcp.h:#include "lwip/opt.h"
+lwip/src/include/lwip/dhcp.h:#if LWIP_DHCP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/dhcp.h:#include "lwip/netif.h"
+lwip/src/include/lwip/dhcp.h:#include "lwip/udp.h"
+lwip/src/include/lwip/dhcp.h:/** allow this to be configured in lwipopts.h, but not too small */
+lwip/src/include/lwip/pbuf.h:#include "lwip/opt.h"
+lwip/src/include/lwip/pbuf.h:#include "lwip/err.h"
+lwip/src/include/lwip/snmp_asn1.h:#include "lwip/opt.h"
+lwip/src/include/lwip/snmp_asn1.h:#include "lwip/err.h"
+lwip/src/include/lwip/snmp_asn1.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/snmp_asn1.h:#include "lwip/snmp.h"
+lwip/src/include/lwip/netbuf.h:#include "lwip/opt.h"
+lwip/src/include/lwip/netbuf.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/def.h:#include "lwip/arch.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/opt.h"
+lwip/src/include/lwip/tcp.h:#if LWIP_TCP                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/tcp.h:#include "lwip/sys.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/mem.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/ip.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/icmp.h"
+lwip/src/include/lwip/tcp.h:#include "lwip/err.h"
+lwip/src/include/lwip/tcp.h:    enum lwip_event {
+lwip/src/include/lwip/tcp.h:    err_t lwip_tcp_event(void *arg, struct tcp_pcb *pcb,
+lwip/src/include/lwip/tcp.h:                         enum lwip_event,
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_ACCEPT(pcb,err,ret)    ret = lwip_tcp_event((pcb)->callback_arg, (pcb),\
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_SENT(pcb,space,ret) ret = lwip_tcp_event((pcb)->callback_arg, (pcb),\
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_RECV(pcb,p,err,ret) ret = lwip_tcp_event((pcb)->callback_arg, (pcb),\
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_CONNECTED(pcb,err,ret) ret = lwip_tcp_event((pcb)->callback_arg, (pcb),\
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_POLL(pcb,ret)       ret = lwip_tcp_event((pcb)->callback_arg, (pcb),\
+lwip/src/include/lwip/tcp.h:#define TCP_EVENT_ERR(errf,arg,err)  lwip_tcp_event((arg), NULL, \
+lwip/src/include/lwip/snmp_msg.h:#include "lwip/opt.h"
+lwip/src/include/lwip/snmp_msg.h:#include "lwip/snmp.h"
+lwip/src/include/lwip/snmp_msg.h:#include "lwip/snmp_structs.h"
+lwip/src/include/lwip/sock_chan_support.h:bool lwip_sock_is_open(int socket);
+lwip/src/include/lwip/sock_chan_support.h:bool lwip_sock_ready_read(int socket);
+lwip/src/include/lwip/sock_chan_support.h:bool lwip_sock_ready_write(int socket);
+lwip/src/include/lwip/sock_chan_support.h:errval_t lwip_sock_waitset_deregister_read(int socket);
+lwip/src/include/lwip/sock_chan_support.h:errval_t lwip_sock_waitset_register_read(int socket, struct waitset *ws);
+lwip/src/include/lwip/sock_chan_support.h:errval_t lwip_sock_waitset_deregister_write(int socket);
+lwip/src/include/lwip/sock_chan_support.h:errval_t lwip_sock_waitset_register_write(int socket, struct waitset *ws);
+lwip/src/include/lwip/snmp.h:#include "lwip/opt.h"
+lwip/src/include/lwip/snmp.h:#include "lwip/netif.h"
+lwip/src/include/lwip/snmp.h:#include "lwip/udp.h"
+lwip/src/include/lwip/snmp.h:#if LWIP_SNMP                   /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/sockets.h:#include "lwip/opt.h"
+lwip/src/include/lwip/sockets.h:#if LWIP_SOCKET                 /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/sockets.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/sockets.h:#include "lwip/inet.h"
+lwip/src/include/lwip/sockets.h: * lwip_ioctl only supports FIONREAD and FIONBIO, for now
+lwip/src/include/lwip/sockets.h:/* FD_SET used for lwip_select */
+lwip/src/include/lwip/sockets.h:    void lwip_socket_init(void);
+lwip/src/include/lwip/sockets.h:    int lwip_accept(int s, struct sockaddr *addr, socklen_t * addrlen);
+lwip/src/include/lwip/sockets.h:    int lwip_bind(int s, const struct sockaddr *name, socklen_t namelen);
+lwip/src/include/lwip/sockets.h:    int lwip_shutdown(int s, int how);
+lwip/src/include/lwip/sockets.h:    int lwip_getpeername(int s, struct sockaddr *name, socklen_t * namelen);
+lwip/src/include/lwip/sockets.h:    int lwip_getsockname(int s, struct sockaddr *name, socklen_t * namelen);
+lwip/src/include/lwip/sockets.h:    int lwip_getsockopt(int s, int level, int optname, void *optval,
+lwip/src/include/lwip/sockets.h:    int lwip_setsockopt(int s, int level, int optname, const void *optval,
+lwip/src/include/lwip/sockets.h:    int lwip_close(int s);
+lwip/src/include/lwip/sockets.h:    int lwip_connect(int s, const struct sockaddr *name, socklen_t namelen);
+lwip/src/include/lwip/sockets.h:    int lwip_listen(int s, int backlog);
+lwip/src/include/lwip/sockets.h:    int lwip_recv(int s, void *mem, size_t len, int flags);
+lwip/src/include/lwip/sockets.h:    int lwip_read(int s, void *mem, size_t len);
+lwip/src/include/lwip/sockets.h:    int lwip_recvfrom(int s, void *mem, size_t len, int flags,
+lwip/src/include/lwip/sockets.h:    int lwip_send(int s, const void *dataptr, size_t size, int flags);
+lwip/src/include/lwip/sockets.h:    int lwip_sendto(int s, const void *dataptr, size_t size, int flags,
+lwip/src/include/lwip/sockets.h:    int lwip_sendmsg(int s, const struct msghdr *msg, int flags);
+lwip/src/include/lwip/sockets.h:    int lwip_socket(int domain, int type, int protocol);
+lwip/src/include/lwip/sockets.h:    int lwip_write(int s, const void *dataptr, size_t size);
+lwip/src/include/lwip/sockets.h:    int lwip_select(int maxfdp1, fd_set * readset, fd_set * writeset,
+lwip/src/include/lwip/sockets.h:    int lwip_ioctl(int s, long cmd, void *argp);
+lwip/src/include/lwip/sockets.h:    int lwip_fcntl(int s, int cmd, int val);
+lwip/src/include/lwip/sockets.h:#define accept(a,b,c)         lwip_accept(a,b,c)
+lwip/src/include/lwip/sockets.h:#define bind(a,b,c)           lwip_bind(a,b,c)
+lwip/src/include/lwip/sockets.h:#define shutdown(a,b)         lwip_shutdown(a,b)
+lwip/src/include/lwip/sockets.h:#define closesocket(s)        lwip_close(s)
+lwip/src/include/lwip/sockets.h:#define connect(a,b,c)        lwip_connect(a,b,c)
+lwip/src/include/lwip/sockets.h:#define getsockname(a,b,c)    lwip_getsockname(a,b,c)
+lwip/src/include/lwip/sockets.h:#define getpeername(a,b,c)    lwip_getpeername(a,b,c)
+lwip/src/include/lwip/sockets.h:#define setsockopt(a,b,c,d,e) lwip_setsockopt(a,b,c,d,e)
+lwip/src/include/lwip/sockets.h:#define getsockopt(a,b,c,d,e) lwip_getsockopt(a,b,c,d,e)
+lwip/src/include/lwip/sockets.h:#define listen(a,b)           lwip_listen(a,b)
+lwip/src/include/lwip/sockets.h:#define recv(a,b,c,d)         lwip_recv(a,b,c,d)
+lwip/src/include/lwip/sockets.h:#define recvfrom(a,b,c,d,e,f) lwip_recvfrom(a,b,c,d,e,f)
+lwip/src/include/lwip/sockets.h:#define send(a,b,c,d)         lwip_send(a,b,c,d)
+lwip/src/include/lwip/sockets.h:#define sendto(a,b,c,d,e,f)   lwip_sendto(a,b,c,d,e,f)
+lwip/src/include/lwip/sockets.h:#define socket(a,b,c)         lwip_socket(a,b,c)
+lwip/src/include/lwip/sockets.h:#define select(a,b,c,d,e)     lwip_select(a,b,c,d,e)
+lwip/src/include/lwip/sockets.h:#define ioctlsocket(a,b,c)    lwip_ioctl(a,b,c)
+lwip/src/include/lwip/sockets.h:#define read(a,b,c)           lwip_read(a,b,c)
+lwip/src/include/lwip/sockets.h:#define write(a,b,c)          lwip_write(a,b,c)
+lwip/src/include/lwip/sockets.h:#define close(s)              lwip_close(s)
+lwip/src/include/lwip/dns.h: * lwip DNS resolver header file.
+lwip/src/include/lwip/dns.h:#include "lwip/opt.h"
+lwip/src/include/lwip/dns.h:#if LWIP_DNS                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/raw.h:#include "lwip/opt.h"
+lwip/src/include/lwip/raw.h:#if LWIP_RAW                    /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/raw.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/raw.h:#include "lwip/inet.h"
+lwip/src/include/lwip/raw.h:#include "lwip/ip.h"
+lwip/src/include/lwip/raw.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/opt.h"
+lwip/src/include/lwip/tcpip.h:#if !NO_SYS                     /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/tcpip.h:#include "lwip/api_msg.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/netifapi.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/pbuf.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/api.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/sys.h"
+lwip/src/include/lwip/tcpip.h:#include "lwip/netif.h"
+lwip/src/include/lwip/sys.h:#include "lwip/opt.h"
+lwip/src/include/lwip/sys.h:#include "lwip/err.h"
+lwip/src/include/lwip/sys.h: * define SYS_LIGHTWEIGHT_PROT in lwipopts.h if you want inter-task protection
+lwip/src/include/lwip/sys.h:extern struct thread_mutex *lwip_mutex;
+lwip/src/include/lwip/sys.h:void lwip_mutex_lock(void);
+lwip/src/include/lwip/sys.h:void lwip_mutex_unlock(void);
+lwip/src/include/lwip/init.h:#include "lwip/opt.h"
+lwip/src/include/lwip/init.h:#include "lwip/err.h"
+lwip/src/include/lwip/init.h:struct netif *owner_lwip_init(char *card_name, uint64_t queueid);
+lwip/src/include/lwip/init.h:bool lwip_init(const char *card_name, uint64_t queueid);
+lwip/src/include/lwip/init.h:bool lwip_init_auto(void);
+lwip/src/include/lwip/init.h:int is_lwip_loaded(void);
+lwip/src/include/lwip/init.h:uint64_t lwip_packet_drop_count(void);
+lwip/src/include/lwip/init.h:uint64_t wrapper_perform_lwip_work(void);
+lwip/src/include/lwip/init.h:void lwip_benchmark_control(int connection, uint8_t state, uint64_t trigger,
+lwip/src/include/lwip/init.h:uint8_t lwip_driver_benchmark_state(int direction, uint64_t *delta,
+lwip/src/include/lwip/init.h:void lwip_debug_show_spp_status(int connection);
+lwip/src/include/lwip/init.h:void lwip_print_interesting_stats(void);
+lwip/src/include/lwip/init.h:void lwip_record_event_simple(uint8_t event_type, uint64_t ts);
+lwip/src/include/lwip/init.h:bool lwip_init_auto_ex(struct waitset *opt_waitset,
+lwip/src/include/lwip/init.h:bool lwip_init_ex(const char *card_name, uint64_t queueid,
+lwip/src/include/lwip/netifapi.h:#include "lwip/opt.h"
+lwip/src/include/lwip/netifapi.h:#if LWIP_NETIF_API              /* don't build if not configured for use in lwipopts.h */
+lwip/src/include/lwip/netifapi.h:#include "lwip/sys.h"
+lwip/src/include/lwip/netifapi.h:#include "lwip/netif.h"
+lwip/src/include/lwip/netifapi.h:#include "lwip/dhcp.h"
+lwip/src/include/lwip/netifapi.h:#include "lwip/autoip.h"
+lwip/src/include/lwip/sio.h:#include "lwip/arch.h"
+lwip/src/include/lwip/netif.h:#include "lwip/opt.h"
+lwip/src/include/lwip/netif.h:#include "lwip/err.h"
+lwip/src/include/lwip/netif.h:#include "lwip/ip_addr.h"
+lwip/src/include/lwip/netif.h:#include "lwip/inet.h"
+lwip/src/include/lwip/netif.h:#include "lwip/pbuf.h"
+lwip/Hakefile:-- Hakefile for lib/lwip
+lwip/Hakefile:  [ build library { target = "lwip",
+net_device_manager/e10k_filt_cl_impl.c:#include <ipv4/lwip/inet.h>
+net_device_manager/Hakefile:-- try to get rid of "lwip" as it is only used for hton[s/l]
+net_device_manager/Hakefile:                    , "lwip"
+net_queue_manager/frag.c:        // not be constructed successfully at the lwip level
+nfs/xdr_pbuf.c:#include <lwip/pbuf.h>
+nfs/rpc.c:#include <lwip/pbuf.h>
+nfs/rpc.c:#include <lwip/udp.h>
+nfs/rpc.c:#include <lwip/init.h>
+nfs/rpc.c:// XXX: lwip synchronisation kludges
+nfs/rpc.c:extern struct thread_mutex *lwip_mutex;
+nfs/rpc.c:extern struct waitset *lwip_waitset;
+nfs/rpc.c://    lwip_record_event_simple(RPC_RECV_T, ts);
+nfs/rpc.c://    lwip_record_event_simple(RPC_CALLBACK_T, ts);
+nfs/rpc.c://    lwip_record_event_simple(RPC_RECV_OUT_T, ts);
+nfs/rpc.c:                    lwip_benchmark_control(0, BMS_START_REQUEST,
+nfs/rpc.c:                    lwip_benchmark_control(1, BMS_START_REQUEST,
+nfs/rpc.c:    if (lwip_mutex != NULL) {
+nfs/rpc.c:        thread_mutex_lock(lwip_mutex);
+nfs/rpc.c:    if (lwip_mutex != NULL) {
+nfs/rpc.c:        thread_mutex_unlock(lwip_mutex);
+nfs/rpc.c:    err = periodic_event_create(&client->timer, lwip_waitset,
+nfs/rpc.c:    if (lwip_mutex != NULL) {
+nfs/rpc.c:        if(thread_mutex_trylock(lwip_mutex)) {
+nfs/rpc.c:    lwip_record_event_simple(RPC_CALL_T, ts);
+posixcompat/close.c:#include <lwip/sockets.h>
+posixcompat/close.c:            // Perform shallow close on lwip so that it will not terminate
+posixcompat/close.c:            ret = lwip_close(e->fd);
+posixcompat/close.c:                POSIXCOMPAT_DEBUG("[%d]error in lwip_close\n",
+posixcompat/sockets.c:#include <lwip/sys.h>
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ssize_t ret = lwip_recv(e->fd, buf, len, flags);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ret = lwip_recvfrom(e->fd, buf, len, flags, src_addr, addrlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ssize_t ret = lwip_send(e->fd, buf, len, flags);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ret = lwip_sendto(e->fd, buf, len, flags, dest_addr, addrlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ret = lwip_sendto(e->fd, buf, totalsize, flags, msg->msg_name,
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        ret = lwip_sendmsg(e->fd, msg, flags);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:            lwip_mutex_lock();
+posixcompat/sockets.c:            int fd = lwip_socket(domain, type, protocol);
+posixcompat/sockets.c:            lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        int ret = lwip_bind(e->fd, addr, addrlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        int ret = lwip_listen(e->fd, backlog);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:                lwip_mutex_lock();
+posixcompat/sockets.c:                int newfd = lwip_accept(e->fd, addr, addrlen);
+posixcompat/sockets.c:                lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        int ret = lwip_getsockopt(e->fd, level, optname, optval, optlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        ret = lwip_setsockopt(e->fd, level, optname, optval, optlen);
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        int ret =  lwip_connect(e->fd, addr, addrlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        int ret = lwip_getsockname(e->fd, addr, addrlen);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:        lwip_mutex_lock();
+posixcompat/sockets.c:        struct hostent *ret =  lwip_gethostbyname(name);
+posixcompat/sockets.c:        lwip_mutex_unlock();
+posixcompat/sockets.c:    return lwip_getaddrinfo(nodename, servname, hints, res);
+posixcompat/sockets.c:    return lwip_freeaddrinfo(ai);
+posixcompat/sockets.c:        return lwip_getpeername(e->fd, addr, addrlen);
+posixcompat/sockets.c:        return lwip_shutdown(e->fd, how);
+posixcompat/epoll.c:#include <lwip/sys.h>
+posixcompat/epoll.c:#include <lwip/sockets.h>
+posixcompat/epoll.c:#include <lwip/sock_chan_support.h>
+posixcompat/epoll.c:                lwip_mutex_lock();
+posixcompat/epoll.c:                    retval = lwip_sock_waitset_register_read(e->fd, &efd->ws);
+posixcompat/epoll.c:                    retval = lwip_sock_waitset_register_write(e->fd, &efd->ws);
+posixcompat/epoll.c:                lwip_mutex_unlock();
+posixcompat/epoll.c:                        lwip_mutex_lock();
+posixcompat/epoll.c:                        if (!lwip_sock_is_open(e->fd)) {
+posixcompat/epoll.c:                        lwip_mutex_unlock();
+posixcompat/epoll.c:                        lwip_mutex_lock();
+posixcompat/epoll.c:                        if (lwip_sock_ready_read(e->fd)) {
+posixcompat/epoll.c:                        lwip_mutex_unlock();
+posixcompat/epoll.c:                        lwip_mutex_lock();
+posixcompat/epoll.c:                        if (lwip_sock_ready_write(e->fd)) {
+posixcompat/epoll.c:                        lwip_mutex_unlock();
+posixcompat/epoll.c:                lwip_mutex_lock();
+posixcompat/epoll.c:                    err = lwip_sock_waitset_deregister_read(e->fd);
+posixcompat/epoll.c:                                       "lwip socket");
+posixcompat/epoll.c:                    err = lwip_sock_waitset_deregister_write(e->fd);
+posixcompat/epoll.c:                                       "lwip socket");
+posixcompat/epoll.c:                lwip_mutex_unlock();
+posixcompat/fcntl.c:#include <lwip/sockets.h>
+posixcompat/fcntl.c:                retval = lwip_fcntl(e->fd, cmd, flags);
+posixcompat/fcntl.c:                retval = lwip_fcntl(e->fd, cmd, 0);
+posixcompat/read.c:#include <lwip/sys.h>
+posixcompat/read.c:#include <lwip/sockets.h>
+posixcompat/read.c:        lwip_mutex_lock();
+posixcompat/read.c:        ret = lwip_read(e->fd, buf, len);
+posixcompat/read.c:        lwip_mutex_unlock();
+posixcompat/select.c:#include <lwip/sys.h>
+posixcompat/select.c:#include <lwip/sockets.h>
+posixcompat/select.c:#include <lwip/sock_chan_support.h>
+posixcompat/select.c:                    lwip_mutex_lock();
+posixcompat/select.c:                    err = lwip_sock_waitset_deregister_read(e->fd);
+posixcompat/select.c:                                       "lwip socket");
+posixcompat/select.c:                    lwip_mutex_unlock();
+posixcompat/select.c:                    lwip_mutex_lock();
+posixcompat/select.c:                    err = lwip_sock_waitset_deregister_write(e->fd);
+posixcompat/select.c:                                       "lwip socket");
+posixcompat/select.c:                    lwip_mutex_unlock();
+posixcompat/select.c:                        lwip_mutex_lock();
+posixcompat/select.c:                        if (lwip_sock_ready_read(e->fd)) {
+posixcompat/select.c:                        lwip_mutex_unlock();
+posixcompat/select.c:                        lwip_mutex_lock();
+posixcompat/select.c:                        if (lwip_sock_ready_write(e->fd)) {
+posixcompat/select.c:                        lwip_mutex_unlock();
+posixcompat/select.c:                        lwip_mutex_lock();
+posixcompat/select.c:                        retval = lwip_sock_waitset_register_read(e->fd, ws);
+posixcompat/select.c:                        lwip_mutex_unlock();
+posixcompat/select.c:                        lwip_mutex_lock();
+posixcompat/select.c:                        retval = lwip_sock_waitset_register_write(e->fd, ws);
+posixcompat/select.c:                        lwip_mutex_unlock();
+posixcompat/select.c:                prt = snprintf(str + strlength, size - strlength, "%d (lwip), ",
+posixcompat/select.c:            SELECT_DEBUG("lwip\n");
+posixcompat/inheritance.c:#include <lwip/sock_serialise.h>
+posixcompat/inheritance.c:static size_t copy_lwip_fd(void *dest, genpaddr_t offset, struct fd_store *fds)
+posixcompat/inheritance.c:    size_t size = sizeof(struct lwip_sockinfo);
+posixcompat/inheritance.c:    struct lwip_sockinfo si;
+posixcompat/inheritance.c:    lwip_serialise_sock(fds->fd, &si);
+posixcompat/inheritance.c:            size = copy_lwip_fd(dest, offset, fds);
+posixcompat/inheritance.c:        fde.fd = lwip_socket(AF_INET, SOCK_STREAM, 0);
+posixcompat/inheritance.c:        struct lwip_sockinfo *si = (struct lwip_sockinfo *)(buf + (uintptr_t)fds->handle);
+posixcompat/inheritance.c:        lwip_deserialise_sock(fde.fd, si);
+posixcompat/write.c:#include <lwip/sys.h>
+posixcompat/write.c:#include <lwip/sockets.h>
+posixcompat/write.c:        lwip_mutex_lock();
+posixcompat/write.c:        ret = lwip_write(e->fd, buf, len);
+posixcompat/write.c:        lwip_mutex_unlock();
+tftp/client.c:#include <lwip/udp.h>
+tftp/client.c:#include <lwip/init.h>
+tftp/client.c:            lwip_init_auto();
+tftp/common.c:#include <lwip/udp.h>
+tftp/Hakefile:    addLibraries = [ "lwip", "contmng", "net_if_raw"]
+tftp/Hakefile:    addLibraries = [ "lwip", "contmng", "net_if_raw"]
+vfs/vfs_nfs.c:#include <lwip/netif.h>
+vfs/vfs_nfs.c:#include <lwip/dhcp.h>
+vfs/vfs_nfs.c:#include <lwip/init.h>
+vfs/vfs_nfs.c:#include <lwip/tcp.h>
+vfs/vfs_nfs.c:#include <lwip/ip_addr.h>
+vfs/vfs_nfs.c:#define MAX_NFS_READ_BYTES   1330 /*14000*//*workaround for breakage in lwip*/
+vfs/vfs_nfs.c:#define MAX_NFS_WRITE_BYTES  1330 /* workaround for breakage in lwip */
+vfs/vfs_nfs.c:#define MAX_NFS_WRITE_CHUNKS 1    /* workaround for breakage in lwip */
+vfs/vfs_nfs.c:// XXX: lwip idc_barrelfish.c
+vfs/vfs_nfs.c:extern struct waitset *lwip_waitset;
+vfs/vfs_nfs.c:    if (lwip_mutex == NULL) { // single-threaded
+vfs/vfs_nfs.c:            errval_t err = event_dispatch_non_block(lwip_waitset);
+vfs/vfs_nfs.c:    if (lwip_mutex == NULL) { // single-threaded
+vfs/vfs_nfs.c:            errval_t err = event_dispatch(lwip_waitset);
+vfs/vfs_nfs.c:        thread_cond_wait(&wait_cond, lwip_mutex);
+vfs/vfs_nfs.c:    if (lwip_mutex == NULL) { // single-threaded
+vfs/vfs_nfs.c:            wrapper_perform_lwip_work();
+vfs/vfs_nfs.c:            errval_t err = event_dispatch(lwip_waitset);
+vfs/vfs_nfs.c:        thread_cond_wait(&wait_cond, lwip_mutex);
+vfs/vfs_nfs.c:    if (lwip_mutex == NULL) { // single-threaded
+vfs/vfs_nfs.c:        assert(!thread_mutex_trylock(lwip_mutex));
+vfs/vfs_nfs.c:    lwip_record_event_simple(NFS_READCB_T, ts);
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:        if (e == ERR_MEM) { // internal resource limit in lwip?
+vfs/vfs_nfs.c:    lwip_record_event_simple(NFS_READ_1_T, ts);
+vfs/vfs_nfs.c:    lwip_record_event_simple(NFS_READ_w_T, ts1);
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_record_event_simple(NFS_READ_T, ts);
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:        lwip_mutex_unlock();
+vfs/vfs_nfs.c:        lwip_mutex_unlock();
+vfs/vfs_nfs.c:        lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:        if (e == ERR_MEM) { // internal resource limit in lwip?
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();
+vfs/vfs_nfs.c:        lwip_init_auto();
+vfs/vfs_nfs.c:    lwip_mutex_lock();
+vfs/vfs_nfs.c:    lwip_mutex_unlock();

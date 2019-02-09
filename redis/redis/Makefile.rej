@@ -1,0 +1,20 @@
+--- Makefile	2014-02-04 02:17:21.000000000 -0800
++++ Makefile	2014-03-27 15:08:31.486191306 -0700
+@@ -18,7 +18,7 @@
+ DEPENDENCY_TARGETS=hiredis linenoise lua
+ 
+ # Default settings
+-STD=-std=c99 -pedantic
++STD=-std=c99
+ WARN=-Wall
+ OPT=$(OPTIMIZATION)
+ 
+@@ -51,7 +51,7 @@
+ 
+ FINAL_CFLAGS=$(STD) $(WARN) $(OPT) $(DEBUG) $(CFLAGS) $(REDIS_CFLAGS)
+ FINAL_LDFLAGS=$(LDFLAGS) $(REDIS_LDFLAGS) $(DEBUG)
+-FINAL_LIBS=-lm
++FINAL_LIBS=-lm $(REDIS_LIBS)
+ DEBUG=-g -ggdb
+ 
+ ifeq ($(uname_S),SunOS)

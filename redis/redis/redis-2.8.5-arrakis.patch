@@ -1,0 +1,930 @@
+Only in redis-arranet-tcp: build.sh
+Only in redis-arranet-tcp: cscope.files
+Only in redis-arranet-tcp: cscope.out
+Only in redis-arranet-tcp/deps/hiredis: async.o
+Only in redis-arranet-tcp/deps/hiredis: hiredis.o
+Only in redis-arranet-tcp/deps/hiredis: libhiredis.a
+Only in redis-arranet-tcp/deps/hiredis: net.o
+Only in redis-arranet-tcp/deps/hiredis: sds.o
+Only in redis-arranet-tcp/deps/jemalloc: lib
+Only in redis-arranet-tcp/deps/linenoise: linenoise.o
+Only in redis-arranet-tcp/deps/lua/src: lapi.o
+Only in redis-arranet-tcp/deps/lua/src: lauxlib.o
+Only in redis-arranet-tcp/deps/lua/src: lbaselib.o
+Only in redis-arranet-tcp/deps/lua/src: lcode.o
+Only in redis-arranet-tcp/deps/lua/src: ldblib.o
+Only in redis-arranet-tcp/deps/lua/src: ldebug.o
+Only in redis-arranet-tcp/deps/lua/src: ldo.o
+Only in redis-arranet-tcp/deps/lua/src: ldump.o
+Only in redis-arranet-tcp/deps/lua/src: lfunc.o
+Only in redis-arranet-tcp/deps/lua/src: lgc.o
+Only in redis-arranet-tcp/deps/lua/src: liblua.a
+Only in redis-arranet-tcp/deps/lua/src: linit.o
+Only in redis-arranet-tcp/deps/lua/src: liolib.o
+Only in redis-arranet-tcp/deps/lua/src: llex.o
+Only in redis-arranet-tcp/deps/lua/src: lmathlib.o
+Only in redis-arranet-tcp/deps/lua/src: lmem.o
+Only in redis-arranet-tcp/deps/lua/src: loadlib.o
+Only in redis-arranet-tcp/deps/lua/src: lobject.o
+Only in redis-arranet-tcp/deps/lua/src: lopcodes.o
+Only in redis-arranet-tcp/deps/lua/src: loslib.o
+Only in redis-arranet-tcp/deps/lua/src: lparser.o
+Only in redis-arranet-tcp/deps/lua/src: lstate.o
+Only in redis-arranet-tcp/deps/lua/src: lstring.o
+Only in redis-arranet-tcp/deps/lua/src: lstrlib.o
+Only in redis-arranet-tcp/deps/lua/src: ltable.o
+Only in redis-arranet-tcp/deps/lua/src: ltablib.o
+Only in redis-arranet-tcp/deps/lua/src: ltm.o
+Only in redis-arranet-tcp/deps/lua/src: luac
+Only in redis-arranet-tcp/deps/lua/src: lua_cjson.o
+Only in redis-arranet-tcp/deps/lua/src: lua_cmsgpack.o
+Only in redis-arranet-tcp/deps/lua/src: luac.o
+Only in redis-arranet-tcp/deps/lua/src: lua.o
+Only in redis-arranet-tcp/deps/lua/src: lua_struct.o
+Only in redis-arranet-tcp/deps/lua/src: lundump.o
+Only in redis-arranet-tcp/deps/lua/src: lvm.o
+Only in redis-arranet-tcp/deps/lua/src: lzio.o
+Only in redis-arranet-tcp/deps/lua/src: print.o
+Only in redis-arranet-tcp/deps/lua/src: strbuf.o
+Only in redis-arranet-tcp/deps: .make-cflags
+Only in redis-arranet-tcp/deps: .make-ldflags
+Only in redis-arranet-tcp/deps: .make-prerequisites
+Only in redis-arranet-tcp: .gitignore
+Only in redis-arranet-tcp: .hg
+Only in redis-arranet-tcp/src: adlist.o
+Only in redis-arranet-tcp/src: ae.o
+Only in redis-arranet-tcp/src: anet.o
+diff -ur redis-vanilla/src/aof.c redis-arranet-tcp/src/aof.c
+--- redis-vanilla/src/aof.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/aof.c	2014-04-24 21:49:00.515136717 -0700
+@@ -39,6 +39,13 @@
+ #include <sys/resource.h>
+ #include <sys/wait.h>
+ 
++#ifdef USE_TENACIOUSD
++#       include <errors/errno.h>
++#       include <tenaciousd/log.h>
++#       include <storage/storage.h>
++#       include <assert.h>
++#endif
++
+ void aofUpdateCurrentSize(void);
+ 
+ /* ----------------------------------------------------------------------------
+@@ -139,7 +146,11 @@
+         ssize_t nwritten;
+ 
+         if (block->used) {
++#ifndef USE_TENACIOUSD
+             nwritten = write(fd,block->buf,block->used);
++#else
++            assert(!"NYI");
++#endif
+             if (nwritten != block->used) {
+                 if (nwritten == 0) errno = EIO;
+                 return -1;
+@@ -157,7 +168,11 @@
+ /* Starts a background task that performs fsync() against the specified
+  * file descriptor (the one of the AOF file) in another thread. */
+ void aof_background_fsync(int fd) {
++#ifndef USE_TENACIOUSD
+     bioCreateBackgroundJob(REDIS_BIO_AOF_FSYNC,(void*)(long)fd,NULL,NULL);
++#else
++    assert(!"NYI");
++#endif
+ }
+ 
+ /* Called when the user switches from "appendonly yes" to "appendonly no"
+@@ -191,14 +206,22 @@
+  * at runtime using the CONFIG command. */
+ int startAppendOnly(void) {
+     server.aof_last_fsync = server.unixtime;
++#ifndef USE_TENACIOUSD
+     server.aof_fd = open(server.aof_filename,O_WRONLY|O_APPEND|O_CREAT,0644);
++#else
++    assert(!"NYI");
++#endif
+     redisAssert(server.aof_state == REDIS_AOF_OFF);
+     if (server.aof_fd == -1) {
+         redisLog(REDIS_WARNING,"Redis needs to enable the AOF but can't open the append only file: %s",strerror(errno));
+         return REDIS_ERR;
+     }
+     if (rewriteAppendOnlyFileBackground() == REDIS_ERR) {
++#ifndef USE_TENACIOUSD
+         close(server.aof_fd);
++#else
++        assert(!"NYI");
++#endif
+         redisLog(REDIS_WARNING,"Redis needs to enable the AOF but can't trigger a background AOF rewrite operation. Check the above logs for more info about the error.");
+         return REDIS_ERR;
+     }
+@@ -208,6 +231,50 @@
+     return REDIS_OK;
+ }
+ 
++//#define DEBUG_LATENCIES
++
++#ifdef DEBUG_LATENCIES
++#       define MAX_LATENCIES           10000
++#       define NUM_TRANSA              20
++
++static uint64_t latencies[MAX_LATENCIES][NUM_TRANSA];
++static int latencies_cnt[NUM_TRANSA];
++
++static inline uint64_t rdtsc(void)
++{
++    uint32_t eax, edx;
++    __asm volatile ("rdtsc" : "=a" (eax), "=d" (edx));
++    return ((uint64_t)edx << 32) | eax;
++}
++
++static void print_latencies(int dummy)
++{
++    for(int j = 1; j < NUM_TRANSA; j++) {
++        uint64_t sum = 0, entries = 0;
++
++        for(int i = 0; i < MAX_LATENCIES && latencies[i][j] != 0; i++) {
++            sum += latencies[i][j] - latencies[i][j - 1];
++            entries++;
++        }
++
++        if(entries > 0) {
++            printf("avg latencies[%d] = %" PRIu64 "\n", j, sum / entries);
++        }
++    }
++
++    exit(0);
++}
++
++#       define RECORD_LATENCIES(n)                      \
++    {                                                   \
++        if(latencies_cnt[n] < MAX_LATENCIES) {          \
++            latencies[latencies_cnt[n]++][n] = rdtsc(); \
++        }                                               \
++    }
++#else
++#       define RECORD_LATENCIES(n)
++#endif
++
+ /* Write the append only file buffer on disk.
+  *
+  * Since we are required to write the AOF before replying to the client,
+@@ -232,6 +299,8 @@
+ 
+     if (sdslen(server.aof_buf) == 0) return;
+ 
++    RECORD_LATENCIES(0);
++
+     if (server.aof_fsync == AOF_FSYNC_EVERYSEC)
+         sync_in_progress = bioPendingJobsOfType(REDIS_BIO_AOF_FSYNC) != 0;
+ 
+@@ -260,6 +329,9 @@
+      * set reset the postponed flush sentinel to zero. */
+     server.aof_flush_postponed_start = 0;
+ 
++    RECORD_LATENCIES(1);
++
++#ifndef USE_TENACIOUSD
+     /* We want to perform a single write. This should be guaranteed atomic
+      * at least if the filesystem we are writing is a real physical one.
+      * While this will save us against the server being killed I don't think
+@@ -289,8 +361,16 @@
+         }
+         exit(1);
+     }
++#else
++    errval_t err = tenaciousd_log_append(server.aof_log, server.aof_entry);
++    assert(err_is_ok(err));
++    nwritten = server.aof_entry->size;
++#endif
+     server.aof_current_size += nwritten;
+ 
++    RECORD_LATENCIES(2);
++
++#ifndef USE_TENACIOUSD
+     /* Re-use AOF buffer when it is small enough. The maximum comes from the
+      * arena size of 4k minus some overhead (but is otherwise arbitrary). */
+     if ((sdslen(server.aof_buf)+sdsavail(server.aof_buf)) < 4000) {
+@@ -299,6 +379,13 @@
+         sdsfree(server.aof_buf);
+         server.aof_buf = sdsempty();
+     }
++#else
++    // Always use a new buffer to keep the old entry around until written
++    server.aof_old_buf = server.aof_buf;
++    server.aof_buf = newAofBuffer();
++#endif
++
++    RECORD_LATENCIES(3);
+ 
+     /* Don't fsync if no-appendfsync-on-rewrite is set to yes and there are
+      * children doing I/O in the background. */
+@@ -317,6 +404,8 @@
+         if (!sync_in_progress) aof_background_fsync(server.aof_fd);
+         server.aof_last_fsync = server.unixtime;
+     }
++
++    RECORD_LATENCIES(4);
+ }
+ 
+ sds catAppendOnlyGenericCommand(sds dst, int argc, robj **argv) {
+@@ -385,6 +474,8 @@
+     sds buf = sdsempty();
+     robj *tmpargv[3];
+ 
++    RECORD_LATENCIES(10);
++
+     /* The DB this command was targeting is not the same as the last command
+      * we appendend. To issue a SELECT command is needed. */
+     if (dictid != server.aof_selected_db) {
+@@ -415,11 +506,28 @@
+         buf = catAppendOnlyGenericCommand(buf,argc,argv);
+     }
+ 
++    RECORD_LATENCIES(11);
++
+     /* Append to the AOF buffer. This will be flushed on disk just before
+      * of re-entering the event loop, so before the client will get a
+      * positive reply about the operation performed. */
+-    if (server.aof_state == REDIS_AOF_ON)
++    if (server.aof_state == REDIS_AOF_ON) {
++#ifndef USE_TENACIOUSD
++        server.aof_buf = sdscatlen(server.aof_buf,buf,sdslen(buf));
++#else
++        if(sdslen(buf) > sdsavail(server.aof_buf)) {
++            server.aof_buf = resizeAofBuffer(server.aof_buf,
++                                             sdslen(buf) + sdslen(server.aof_buf));
++        }
++
++        // Log entry buffer large enough, just cat
++        sds oldbuf = server.aof_buf;
+         server.aof_buf = sdscatlen(server.aof_buf,buf,sdslen(buf));
++        assert(oldbuf == server.aof_buf);
++#endif
++    }
++
++    RECORD_LATENCIES(12);
+ 
+     /* If a background append only file rewriting is in progress we want to
+      * accumulate the differences between the child DB and the current one
+@@ -429,6 +537,8 @@
+         aofRewriteBufferAppend((unsigned char*)buf,sdslen(buf));
+ 
+     sdsfree(buf);
++
++    RECORD_LATENCIES(13);
+ }
+ 
+ /* ----------------------------------------------------------------------------
+@@ -475,11 +585,20 @@
+  * fatal error an error message is logged and the program exists. */
+ int loadAppendOnlyFile(char *filename) {
+     struct redisClient *fakeClient;
++#ifndef USE_TENACIOUSD
+     FILE *fp = fopen(filename,"r");
+     struct redis_stat sb;
++#else
++    FILE *fp = stdin;
++#endif
+     int old_aof_state = server.aof_state;
+     long loops = 0;
+ 
++#ifdef DEBUG_LATENCIES
++    signal(SIGINT, print_latencies);
++#endif
++
++#ifndef USE_TENACIOUSD
+     if (fp && redis_fstat(fileno(fp),&sb) != -1 && sb.st_size == 0) {
+         server.aof_current_size = 0;
+         fclose(fp);
+@@ -487,9 +606,24 @@
+     }
+ 
+     if (fp == NULL) {
++#	ifdef USE_MEGARAID
++      // XXX: Currently don't support reading AOF log from MegaRAID blockdevfs
++      // blockdevfs doesn't allow a file being open twice...
++      server.aof_current_size = 0;
++      return REDIS_ERR;
++#	endif
+         redisLog(REDIS_WARNING,"Fatal error: can't open the append log file for reading: %s",strerror(errno));
+         exit(1);
+     }
++#else
++    if(server.aof_log->entries == 0) {
++      server.aof_current_size = 0;
++      return REDIS_ERR;
++    }
++
++    struct tenaciousd_log_iter iter = tenaciousd_log_begin(server.aof_log);
++    char *buf = tenaciousd_log_iter_data(iter) + sizeof(struct sdshdr);
++#endif
+ 
+     /* Temporarily disable AOF, to prevent EXEC from feeding a MULTI
+      * to the same file we're about to read. */
+@@ -502,7 +636,9 @@
+         int argc, j;
+         unsigned long len;
+         robj **argv;
++#ifndef USE_TENACIOUSD
+         char buf[128];
++#endif
+         sds argsds;
+         struct redisCommand *cmd;
+ 
+@@ -512,25 +648,50 @@
+             aeProcessEvents(server.el, AE_FILE_EVENTS|AE_DONT_WAIT);
+         }
+ 
++#ifndef USE_TENACIOUSD
+         if (fgets(buf,sizeof(buf),fp) == NULL) {
+             if (feof(fp))
+                 break;
+             else
+                 goto readerr;
+         }
++#else
++        // If at end of buffer, load the next log entry
++        if(*buf == '\0') {
++            iter = tenaciousd_log_next(server.aof_log, iter);
++            if(iter.entry == NULL) {
++                break;
++            }
++            buf = tenaciousd_log_iter_data(iter) + sizeof(struct sdshdr);
++        }
++#endif
+         if (buf[0] != '*') goto fmterr;
+         argc = atoi(buf+1);
+         if (argc < 1) goto fmterr;
++#ifdef USE_TENACIOUSD
++            buf = strchr(buf, '\n') + 1;
++#endif
+ 
+         argv = zmalloc(sizeof(robj*)*argc);
+         for (j = 0; j < argc; j++) {
++#ifndef USE_TENACIOUSD
+             if (fgets(buf,sizeof(buf),fp) == NULL) goto readerr;
++#endif
+             if (buf[0] != '$') goto fmterr;
+             len = strtol(buf+1,NULL,10);
+             argsds = sdsnewlen(NULL,len);
++#ifndef USE_TENACIOUSD
+             if (len && fread(argsds,len,1,fp) == 0) goto fmterr;
++#else
++            buf = strchr(buf, '\n') + 1;
++            if(len) memcpy(argsds, buf, len);
++#endif
+             argv[j] = createObject(REDIS_STRING,argsds);
++#ifndef USE_TENACIOUSD
+             if (fread(buf,2,1,fp) == 0) goto fmterr; /* discard CRLF */
++#else
++            buf += len + 2;
++#endif
+         }
+ 
+         /* Command lookup */
+@@ -560,7 +721,9 @@
+      * If the client is in the middle of a MULTI/EXEC, log error and quit. */
+     if (fakeClient->flags & REDIS_MULTI) goto readerr;
+ 
++#ifndef USE_TENACIOUSD
+     fclose(fp);
++#endif
+     freeFakeClient(fakeClient);
+     server.aof_state = old_aof_state;
+     stopLoading();
+@@ -940,6 +1103,8 @@
+     return REDIS_ERR;
+ }
+ 
++#include <assert.h>
++
+ /* This is how rewriting of the append only file in background works:
+  *
+  * 1) The user calls BGREWRITEAOF
+@@ -958,6 +1123,9 @@
+ 
+     if (server.aof_child_pid != -1) return REDIS_ERR;
+     start = ustime();
++#ifdef BARRELFISH
++    assert(!"NYI");
++#else
+     if ((childpid = fork()) == 0) {
+         char tmpfile[256];
+ 
+@@ -1000,6 +1168,7 @@
+         replicationScriptCacheFlush();
+         return REDIS_OK;
+     }
++#endif
+     return REDIS_OK; /* unreached */
+ }
+ 
+@@ -1028,6 +1197,7 @@
+  * a restart, normally the size is updated just adding the write length
+  * to the current length, that is much faster. */
+ void aofUpdateCurrentSize(void) {
++#ifndef USE_TENACIOUSD
+     struct redis_stat sb;
+ 
+     if (redis_fstat(server.aof_fd,&sb) == -1) {
+@@ -1036,7 +1206,37 @@
+     } else {
+         server.aof_current_size = sb.st_size;
+     }
++#else
++    server.aof_current_size = server.aof_log->end;
++#endif
++}
++
++#ifdef USE_TENACIOUSD
++sds newAofBuffer(void)
++{
++    size_t size = TENACIOUSD_LOG_MIN_ENTRY_SIZE(server.aof_log);
++    server.aof_entry = tenaciousd_log_entry_new(server.aof_log, &size);
++    assert(server.aof_entry != NULL);
++    struct sdshdr *sh = (void *)server.aof_entry->data;
++    sh->len = 0;
++    sh->free = size - sizeof(struct sdshdr);
++    sh->buf[0] = '\0';
++
++    return (sds)sh->buf;
++}
++
++sds resizeAofBuffer(sds buf, size_t newsize)
++{
++    newsize += sizeof(struct sdshdr);
++    server.aof_entry =
++        tenaciousd_log_entry_resize(server.aof_log, server.aof_entry, &newsize);
++    assert(server.aof_entry != NULL);
++    struct sdshdr *sh = (void *)server.aof_entry->data;
++    sh->free = newsize - sh->len - sizeof(struct sdshdr);
++
++    return (sds)sh->buf;
+ }
++#endif
+ 
+ /* A background append only file rewriting (BGREWRITEAOF) terminated its work.
+  * Handle this. */
+@@ -1103,7 +1303,11 @@
+              /* Don't care if this fails: oldfd will be -1 and we handle that.
+               * One notable case of -1 return is if the old file does
+               * not exist. */
++#ifndef USE_TENACIOUSD
+              oldfd = open(server.aof_filename,O_RDONLY|O_NONBLOCK);
++#else
++             assert(!"NYI");
++#endif
+         } else {
+             /* AOF enabled */
+             oldfd = -1; /* We'll set this to the current AOF filedes later. */
+@@ -1137,8 +1341,12 @@
+ 
+             /* Clear regular AOF buffer since its contents was just written to
+              * the new AOF from the background rewrite buffer. */
++#ifndef USE_TENACIOUSD
+             sdsfree(server.aof_buf);
+             server.aof_buf = sdsempty();
++#else
++	    server.aof_buf = newAofBuffer();
++#endif
+         }
+ 
+         server.aof_lastbgrewrite_status = REDIS_OK;
+@@ -1175,3 +1383,31 @@
+     if (server.aof_state == REDIS_AOF_WAIT_REWRITE)
+         server.aof_rewrite_scheduled = 1;
+ }
++
++#ifdef USE_TENACIOUSD
++int tenaciousd_fsync(int fd)
++{
++  if(fd != -1) {
++    // Regular file descriptor
++#ifdef __linux__
++    return fdatasync(fd);
++#else
++    return fsync(fd);
++#endif
++  } else {
++    errval_t err = server.aof_vsic.ops.flush(&server.aof_vsic, &server.aof_vsa);
++    assert(err_is_ok(err));
++    err = server.aof_vsic.ops.wait(&server.aof_vsic);
++    assert(err_is_ok(err));
++
++    // Free old log entry
++    assert(server.aof_old_buf != NULL);
++    struct tenaciousd_log_entry *entry =
++        (void *)(server.aof_old_buf - sizeof(struct sdshdr)
++                 - sizeof(struct tenaciousd_log_entry) + 1);
++    tenaciousd_log_entry_delete(server.aof_log, entry);
++
++    return 0;
++  }
++}
++#endif
+Only in redis-arranet-tcp/src: aof.o
+Only in redis-arranet-tcp/src: bio.o
+Only in redis-arranet-tcp/src: bitops.o
+diff -ur redis-vanilla/src/config.c redis-arranet-tcp/src/config.c
+--- redis-vanilla/src/config.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/config.c	2014-04-24 17:11:57.969768233 -0700
+@@ -318,10 +318,12 @@
+             }
+             server.aof_state = yes ? REDIS_AOF_ON : REDIS_AOF_OFF;
+         } else if (!strcasecmp(argv[0],"appendfilename") && argc == 2) {
++#ifndef BARRELFISH
+             if (!pathIsBaseName(argv[1])) {
+                 err = "appendfilename can't be a path, just a filename";
+                 goto loaderr;
+             }
++#endif
+             zfree(server.aof_filename);
+             server.aof_filename = zstrdup(argv[1]);
+         } else if (!strcasecmp(argv[0],"no-appendfsync-on-rewrite")
+diff -ur redis-vanilla/src/config.h redis-arranet-tcp/src/config.h
+--- redis-vanilla/src/config.h	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/config.h	2014-03-25 17:06:03.603444566 -0700
+@@ -77,11 +77,15 @@
+ #endif
+ 
+ /* Define aof_fsync to fdatasync() in Linux and fsync() for all the rest */
++#ifdef USE_TENACIOUSD
++#define aof_fsync tenaciousd_fsync
++#else
+ #ifdef __linux__
+ #define aof_fsync fdatasync
+ #else
+ #define aof_fsync fsync
+ #endif
++#endif
+ 
+ /* Define rdb_fsync_range to sync_file_range() on Linux, otherwise we use
+  * the plain fsync() call. */
+@@ -123,7 +127,7 @@
+ #include <sys/types.h> /* This will likely define BYTE_ORDER */
+ 
+ #ifndef BYTE_ORDER
+-#if (BSD >= 199103)
++#if (BSD >= 199103) || defined(BARRELFISH)
+ # include <machine/endian.h>
+ #else
+ #if defined(linux) || defined(__linux__)
+Only in redis-arranet-tcp/src: config.o
+Only in redis-arranet-tcp/src: crc64.o
+Only in redis-arranet-tcp/src: db.o
+Only in redis-arranet-tcp/src: debug.o
+Only in redis-arranet-tcp/src: dict.o
+Only in redis-arranet-tcp/src: endianconv.o
+Only in redis-arranet-tcp/src: intset.o
+Only in redis-arranet-tcp/src: lzf_c.o
+Only in redis-arranet-tcp/src: lzf_d.o
+diff -ur redis-vanilla/src/Makefile redis-arranet-tcp/src/Makefile
+--- redis-vanilla/src/Makefile	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/Makefile	2014-03-27 15:08:31.486191306 -0700
+@@ -18,7 +18,7 @@
+ DEPENDENCY_TARGETS=hiredis linenoise lua
+ 
+ # Default settings
+-STD=-std=c99 -pedantic
++STD=-std=c99
+ WARN=-Wall
+ OPT=$(OPTIMIZATION)
+ 
+@@ -51,7 +51,7 @@
+ 
+ FINAL_CFLAGS=$(STD) $(WARN) $(OPT) $(DEBUG) $(CFLAGS) $(REDIS_CFLAGS)
+ FINAL_LDFLAGS=$(LDFLAGS) $(REDIS_LDFLAGS) $(DEBUG)
+-FINAL_LIBS=-lm
++FINAL_LIBS=-lm $(REDIS_LIBS)
+ DEBUG=-g -ggdb
+ 
+ ifeq ($(uname_S),SunOS)
+Only in redis-arranet-tcp/src: .make-prerequisites
+Only in redis-arranet-tcp/src: .make-settings
+Only in redis-arranet-tcp/src: memtest.o
+Only in redis-arranet-tcp/src: migrate.o
+Only in redis-arranet-tcp/src: multi.o
+Only in redis-arranet-tcp/src: networking.o
+Only in redis-arranet-tcp/src: notify.o
+Only in redis-arranet-tcp/src: object.o
+Only in redis-arranet-tcp/src: pqsort.o
+Only in redis-arranet-tcp/src: pubsub.o
+Only in redis-arranet-tcp/src: rand.o
+diff -ur redis-vanilla/src/rdb.c redis-arranet-tcp/src/rdb.c
+--- redis-vanilla/src/rdb.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/rdb.c	2014-02-21 11:11:23.039121590 -0800
+@@ -715,6 +715,8 @@
+     return REDIS_ERR;
+ }
+ 
++#include <assert.h>
++
+ int rdbSaveBackground(char *filename) {
+     pid_t childpid;
+     long long start;
+@@ -725,6 +727,9 @@
+     server.lastbgsave_try = time(NULL);
+ 
+     start = ustime();
++#ifdef BARRELFISH
++    assert(!"NYI");
++#else
+     if ((childpid = fork()) == 0) {
+         int retval;
+ 
+@@ -757,6 +762,7 @@
+         updateDictResizePolicy();
+         return REDIS_OK;
+     }
++#endif
+     return REDIS_OK; /* unreached */
+ }
+ 
+Only in redis-arranet-tcp/src: rdb.o
+diff -ur redis-vanilla/src/redis-benchmark.c redis-arranet-tcp/src/redis-benchmark.c
+--- redis-vanilla/src/redis-benchmark.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/redis-benchmark.c	2014-02-13 17:51:49.923390187 -0800
+@@ -75,6 +75,7 @@
+     int loop;
+     int idlemode;
+     int dbnum;
++    long long timeout;
+     sds dbnumstr;
+     char *tests;
+ } config;
+@@ -444,6 +445,13 @@
+     }
+ }
+ 
++static int benchmark_timeout(struct aeEventLoop *el, long long id, void *unused)
++{
++    // Stop after timeout
++    el->stop = 1;
++    return AE_NOMORE;
++}
++
+ static void benchmark(char *title, char *cmd, int len) {
+     client c;
+ 
+@@ -454,6 +462,11 @@
+     c = createClient(cmd,len,NULL);
+     createMissingClients(c);
+ 
++    if(config.timeout > 0) {
++        aeCreateTimeEvent(config.el, config.timeout, benchmark_timeout,
++                          NULL, NULL);
++    }
++
+     config.start = mstime();
+     aeMain(config.el);
+     config.totlatency = mstime()-config.start;
+@@ -523,6 +536,8 @@
+             config.tests = sdscat(config.tests,(char*)argv[++i]);
+             config.tests = sdscat(config.tests,",");
+             sdstolower(config.tests);
++        } else if (!strcmp(argv[i],"-T")) {
++            config.timeout = atoll(argv[++i]) * 1000;
+         } else if (!strcmp(argv[i],"--dbnum")) {
+             if (lastarg) goto invalid;
+             config.dbnum = atoi(argv[++i]);
+@@ -567,6 +582,7 @@
+ " -l                 Loop. Run the tests forever\n"
+ " -t <tests>         Only run the comma separated list of tests. The test\n"
+ "                    names are the same as the ones produced as output.\n"
++" -T <timeout>       Timeout in seconds.\n"
+ " -I                 Idle mode. Just open N idle connections and wait.\n\n"
+ "Examples:\n\n"
+ " Run the benchmark with the default configuration against 127.0.0.1:6379:\n"
+diff -ur redis-vanilla/src/redis.c redis-arranet-tcp/src/redis.c
+--- redis-vanilla/src/redis.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/redis.c	2014-04-25 11:30:33.041126516 -0700
+@@ -51,6 +51,22 @@
+ #include <sys/utsname.h>
+ #include <locale.h>
+ 
++#ifdef BARRELFISH
++#   include <vfs/vfs.h>
++void lwip_arrakis_start(int *argc, char ***argv);
++/* errval_t sys_debug_disable_helpers(void); */
++void debug_control_plane_forbidden(void);
++/* void monitor_disable_intermon(void); */
++/* void thread_no_yield_dispatcher(void); */
++extern bool lesscore_enabled;
++#endif
++
++#ifdef USE_TENACIOUSD
++#       include <assert.h>
++
++#define TENACIOUSD_VSA_SIZE     (1024*1024*10)    /* 10 MB per block */
++#endif
++
+ /* Our shared "common" objects */
+ 
+ struct sharedObjectsStruct shared;
+@@ -1103,6 +1119,7 @@
+             }
+          }
+ 
++#if 0
+          /* Trigger an AOF rewrite if needed */
+          if (server.rdb_child_pid == -1 &&
+              server.aof_child_pid == -1 &&
+@@ -1117,6 +1134,7 @@
+                 rewriteAppendOnlyFileBackground();
+             }
+          }
++#endif
+     }
+ 
+ 
+@@ -1567,7 +1585,18 @@
+     server.rdb_child_pid = -1;
+     server.aof_child_pid = -1;
+     aofRewriteBufferReset();
++#ifndef USE_TENACIOUSD
+     server.aof_buf = sdsempty();
++#else
++    errval_t err = storage_vsic_driver_init(0, NULL, &server.aof_vsic);
++    assert(err_is_ok(err));
++    err = storage_vsa_acquire(&server.aof_vsa, "0", TENACIOUSD_VSA_SIZE);
++    assert(err_is_ok(err));
++    server.aof_log = tenaciousd_log_new(&server.aof_vsa, &server.aof_vsic);
++    assert(server.aof_log != NULL);
++    server.aof_buf = newAofBuffer();
++    server.aof_old_buf = NULL;
++#endif
+     server.lastsave = time(NULL); /* At startup we consider the DB saved. */
+     server.lastbgsave_try = 0;    /* At startup we never tried to BGSAVE. */
+     server.rdb_save_time_last = -1;
+@@ -1616,6 +1645,7 @@
+         acceptUnixHandler,NULL) == AE_ERR) redisPanic("Unrecoverable error creating server.sofd file event.");
+ 
+     /* Open the AOF file if needed. */
++#ifndef USE_TENACIOUSD
+     if (server.aof_state == REDIS_AOF_ON) {
+         server.aof_fd = open(server.aof_filename,
+                                O_WRONLY|O_APPEND|O_CREAT,0644);
+@@ -1625,6 +1655,10 @@
+             exit(1);
+         }
+     }
++#else
++    // AOF file not used
++    server.aof_fd = -1;
++#endif
+ 
+     /* 32 bit instances are limited to 4GB of address space, so if there is
+      * no explicit limit in the user provided configuration we set a limit
+@@ -2057,9 +2091,14 @@
+                 "There is a child rewriting the AOF. Killing it!");
+             kill(server.aof_child_pid,SIGUSR1);
+         }
++#ifndef USE_TENACIOUSD
+         /* Append only file: fsync() the AOF and exit */
+         redisLog(REDIS_NOTICE,"Calling fsync() on the AOF file.");
+         aof_fsync(server.aof_fd);
++#else
++        errval_t err = tenaciousd_log_delete(server.aof_log);
++        assert(err_is_ok(err));
++#endif
+     }
+     if ((server.saveparamslen > 0 && !nosave) || save) {
+         redisLog(REDIS_NOTICE,"Saving the final RDB snapshot before exiting.");
+@@ -2802,6 +2841,9 @@
+ void daemonize(void) {
+     int fd;
+ 
++#ifdef BARRELFISH
++    assert(!"NYI");
++#else
+     if (fork() != 0) exit(0); /* parent exits */
+     setsid(); /* create a new session */
+ 
+@@ -2814,6 +2856,7 @@
+         dup2(fd, STDERR_FILENO);
+         if (fd > STDERR_FILENO) close(fd);
+     }
++#endif
+ }
+ 
+ void version() {
+@@ -2942,6 +2985,21 @@
+ int main(int argc, char **argv) {
+     struct timeval tv;
+ 
++#ifdef BARRELFISH
++    {
++        vfs_init();
++#	ifdef USE_MEGARAID
++        errval_t err = vfs_mkdir("/mnt");
++        assert(err_is_ok(err));
++        err = vfs_mount("/mnt", "blockdevfs://megaraid");
++        assert(err_is_ok(err));
++#	endif
++        lwip_arrakis_start(&argc, &argv);
++        lesscore_enabled = false;
++        free(malloc(128 * 1024 * 1024));    // XXX: Pre-seed malloc()
++    }
++#endif
++
+     /* We need to initialize our libraries, and the server configuration. */
+ #ifdef INIT_SETPROCTITLE_REPLACEMENT
+     spt_init(argc, argv);
+diff -ur redis-vanilla/src/redis.h redis-arranet-tcp/src/redis.h
+--- redis-vanilla/src/redis.h	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/redis.h	2014-03-27 16:08:31.077425684 -0700
+@@ -51,6 +51,12 @@
+ #include <lua.h>
+ #include <signal.h>
+ 
++#ifdef USE_TENACIOUSD
++#       include <errors/errno.h>
++#       include <tenaciousd/log.h>
++#       include <storage/storage.h>
++#endif
++
+ #include "ae.h"      /* Event driven programming library */
+ #include "sds.h"     /* Dynamic safe strings */
+ #include "dict.h"    /* Hash tables */
+@@ -655,6 +661,13 @@
+     list *aof_rewrite_buf_blocks;   /* Hold changes during an AOF rewrite. */
+     sds aof_buf;      /* AOF buffer, written before entering the event loop */
+     int aof_fd;       /* File descriptor of currently selected AOF file */
++#ifdef USE_TENACIOUSD
++    sds aof_old_buf;
++    struct tenaciousd_log *aof_log;
++    struct tenaciousd_log_entry *aof_entry;
++    struct storage_vsic aof_vsic;
++    struct storage_vsa aof_vsa;
++#endif
+     int aof_selected_db; /* Currently selected DB in AOF */
+     time_t aof_flush_postponed_start; /* UNIX time of postponed AOF flush */
+     time_t aof_last_fsync;            /* UNIX time of last fsync() */
+@@ -1051,6 +1064,10 @@
+ void backgroundRewriteDoneHandler(int exitcode, int bysignal);
+ void aofRewriteBufferReset(void);
+ unsigned long aofRewriteBufferSize(void);
++#ifdef USE_TENACIOUSD
++sds newAofBuffer(void);
++sds resizeAofBuffer(sds buf, size_t newsize);
++#endif
+ 
+ /* Sorted sets data type */
+ 
+@@ -1370,4 +1387,8 @@
+ #define redisDebugMark() \
+     printf("-- MARK %s:%d --\n", __FILE__, __LINE__)
+ 
++#ifdef USE_TENACIOUSD
++int tenaciousd_fsync(int fd);
++#endif
++
+ #endif
+Only in redis-arranet-tcp/src: redis.o
+Only in redis-arranet-tcp/src: redis-server
+Only in redis-arranet-tcp/src: release.h
+Only in redis-arranet-tcp/src: release.o
+Only in redis-arranet-tcp/src: replication.o
+Only in redis-arranet-tcp/src: rio.o
+Only in redis-arranet-tcp/src: scripting.o
+Only in redis-arranet-tcp/src: sds.o
+diff -ur redis-vanilla/src/sentinel.c redis-arranet-tcp/src/sentinel.c
+--- redis-vanilla/src/sentinel.c	2014-02-04 02:17:21.000000000 -0800
++++ redis-arranet-tcp/src/sentinel.c	2014-02-21 11:12:11.799386798 -0800
+@@ -625,6 +625,8 @@
+     return NULL;
+ }
+ 
++#include <assert.h>
++
+ /* Run pending scripts if we are not already at max number of running
+  * scripts. */
+ void sentinelRunPendingScripts(void) {
+@@ -650,7 +652,11 @@
+         sj->flags |= SENTINEL_SCRIPT_RUNNING;
+         sj->start_time = mstime();
+         sj->retry_num++;
++#ifdef BARRELFISH
++        assert(!"NYI");
++#else
+         pid = fork();
++#endif
+ 
+         if (pid == -1) {
+             /* Parent (fork error).
+Only in redis-arranet-tcp/src: sentinel.o
+Only in redis-arranet-tcp/src: setproctitle.o
+Only in redis-arranet-tcp/src: sha1.o
+Only in redis-arranet-tcp/src: slowlog.o
+Only in redis-arranet-tcp/src: sort.o
+Only in redis-arranet-tcp/src: syncio.o
+Only in redis-arranet-tcp/src: t_hash.o
+Only in redis-arranet-tcp/src: t_list.o
+Only in redis-arranet-tcp/src: t_set.o
+Only in redis-arranet-tcp/src: t_string.o
+Only in redis-arranet-tcp/src: t_zset.o
+Only in redis-arranet-tcp/src: util.o
+Only in redis-arranet-tcp/src: ziplist.o
+Only in redis-arranet-tcp/src: zipmap.o
+Only in redis-arranet-tcp/src: zmalloc.o
